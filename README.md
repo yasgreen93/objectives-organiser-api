@@ -15,36 +15,44 @@ Tests use `objectives-organiser_test` database and clears and creates a new tabl
 
 ----
 
-### Endpoints:
+### Endpoints:
+
 
 #### Objectives:
-`POST /create-objective` - create objective with the data:
-* `title`
-* `type`
-* `totalPagesVideos`
-* `timeAllocated`
+* `POST /create-objective` - create objective with the data:
+  * `title`
+  * `type`
+  * `totalPagesVideos`
+  * `timeAllocated`
 
-`GET /read-objective` - read single objective with:
-* `id`
 
-`GET /read-all-objectives` - read all objectives
+* `GET /read-objective` - read single objective with:
+  * `id`
 
-`POST /edit-objective` - edit objective with any of:
-* `title`
-* `type`
-* `totalPagesVideos`
-* `timeAllocated`
 
-`POST /delete-objective` - delete objective with:
-* `id`
+* `GET /read-all-objectives` - read all objectives
+
+
+* `POST /edit-objective` - edit objective with any of:
+  * `title`
+  * `type`
+  * `totalPagesVideos`
+  * `timeAllocated`
+
+
+* `POST /delete-objective` - delete objective with:
+  * `id`
+
 
 #### Progress updates:
-`POST /create-progress-update` - create progress update for single objective:
-* `objectiveId`
-* `pageVideoNumReached`
-* `learningSummary`
+* `POST /create-progress-update` - create progress update for single objective:
+  * `objectiveId`
+  * `pageVideoNumReached`
+  * `learningSummary`
 
-`GET /read-progress-updates` - read progress updates for single objective:
-* `objectiveId`
 
-`GET /read-all-progress-updates` - read all progress updates
+* `GET /read-progress-updates` - read progress updates for single objective:
+  * `objectiveId`
+
+
+* `GET /read-all-progress-updates` - read all progress updates
