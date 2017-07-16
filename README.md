@@ -2,7 +2,7 @@
 
 * `npm i` to install modules
 * `npm start` to start the server - port is 3000.
-* `npm test` to run mocha unit tests.
+* `npm test` to run mocha unit tests. The server needs to be running in another terminal tab.
 
 Runs two `postgres` databases:
 * `objectives-organiser_development`

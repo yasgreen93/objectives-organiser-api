@@ -25,6 +25,7 @@
     "eslint": "^4.2.0",
     "mocha": "^3.4.2",
     "should": "^11.2.1",
-    "supertest": "^3.0.0"
+    "supertest": "^3.0.0",
+    "validate": "^3.0.1"
   }
 }

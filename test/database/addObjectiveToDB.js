@@ -1,19 +1,14 @@
-var should = require("should");
-var models = require("../../server/models/index");
+const should = require("should");
+const models = require("../../server/models/index");
+const { resetObjectivesTable } = require("../helpers");
 
-before(function(done) {
-  models.Objective.sync({ force : true })
-    .then(function() {
-      done(null);
-    })
-    .catch(function() {
-      console.log("Error"); // eslint-disable-line no-console
-    });
+beforeEach(function(done) {
+  resetObjectivesTable(done);
 });
 
 describe('Adding objective to database', () => {
   it('should add a new objective to the database', (done) => {
-    var newObjective = {
+    const newObjective = {
       dateCreated: new Date(),
       title: 'test objective',
       type: 'book',
