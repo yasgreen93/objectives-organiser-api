@@ -1,7 +1,5 @@
-var request = require("request");
 var should = require("should");
-var models = require("../server/models/index");
-var Sequelize = require('sequelize');
+var models = require("../../server/models/index");
 
 before(function(done) {
   models.Objective.sync({ force : true })
@@ -9,7 +7,7 @@ before(function(done) {
       done(null);
     })
     .catch(function() {
-      console.log("Error");
+      console.log("Error"); // eslint-disable-line no-console
     });
 });
 
@@ -31,7 +29,7 @@ describe('Adding objective to database', () => {
         done();
       });
     }).catch(function(error) {
-      console.log('Failed:' + error);
+      console.log('Failed:' + error); // eslint-disable-line no-console
     });
   });
 });
