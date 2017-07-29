@@ -1,16 +1,17 @@
 const express = require('express');
-const router = express.Router();
 const bodyParser = require('body-parser');
 const models = require('../server/models/index');
 const { validateObjectiveData } = require('./validation');
-router.use(bodyParser.json());
-router.use(bodyParser.urlencoded({extended: false}));
 
-router.get('/', (req, res, next) => {
+const router = express.Router();
+router.use(bodyParser.json());
+router.use(bodyParser.urlencoded({ extended: false }));
+
+router.get('/', (req, res) => {
   res.render('index', { title: 'Objective organiser' });
 });
 
-router.post('/create-objective', (req, res, next) => {
+router.post('/objectives', (req, res) => {
   const validatedRequestData = validateObjectiveData(req.body);
   return !validatedRequestData.isValid ?
     res.status(400).send(validatedRequestData.errorMessage) :
@@ -22,7 +23,7 @@ router.post('/create-objective', (req, res, next) => {
         totalPagesVideos: req.body.totalPagesVideos,
         timeAllocated: req.body.timeAllocated,
         completed: false,
-      }
+      },
     }).then((response) => {
       const data = response[0].dataValues;
       res.status(200).send({
@@ -35,6 +36,14 @@ router.post('/create-objective', (req, res, next) => {
         completed: data.completed,
       });
     });
+});
+
+router.get('/objectives', (req, res) => {
+  models.Objective.findAll()
+    .then((objectives) => {
+      res.status(200).send(objectives);
+    })
+    .catch(error => error);
 });
 
 module.exports = router;

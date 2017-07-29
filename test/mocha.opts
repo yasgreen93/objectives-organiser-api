@@ -1,2 +1,2 @@
 --recursive
---reporter list
+--reporter spec

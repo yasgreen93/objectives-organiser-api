@@ -4,7 +4,7 @@
         "node": true,
         "mocha": true
     },
-    "extends": "eslint:recommended",
+    "extends": "airbnb",
     "rules": {
         "indent": [
             "error",
@@ -17,6 +17,9 @@
         "semi": [
             "error",
             "always"
-        ]
+        ],
+        "jsx-a11y/href-no-hash": 0,
+        "import/no-extraneous-dependencies": 0,
+        "key-spacing": ["error", { "beforeColon": false }]
     }
 }
