@@ -20,6 +20,7 @@
         ],
         "jsx-a11y/href-no-hash": 0,
         "import/no-extraneous-dependencies": 0,
-        "key-spacing": ["error", { "beforeColon": false }]
+        "key-spacing": ["error", { "beforeColon": false }],
+        "template-curly-spacing": ["error", "always"]
     }
 }

@@ -9,6 +9,14 @@ const exampleObjective = {
   completed: false,
 };
 
+const exampleProgressUpdate = {
+  dateCreated: new Date(),
+  objectiveId: 1,
+  pageVideoNumReached: 10,
+  learningSummary: 'Learned some stuff',
+};
+
+
 function resetObjectivesTable(done) {
   models.Objective.sync({ force: true })
     .then(() => {
@@ -17,17 +25,30 @@ function resetObjectivesTable(done) {
     .catch(error => (error));
 }
 
-function addObjectiveToDatabase() {
-  models.Objective.findOrCreate({
-    where: exampleObjective,
-  })
-    .then(response => response[0].dataValues)
-    .catch(error => error);
+function resetProgressUpdatesTable(done) {
+  models.ProgressUpdate.sync({ force: true })
+    .then(() => done(null))
+    .catch(() => {
+      console.log('Error'); // eslint-disable-line no-console
+    });
 }
 
+function addObjectiveToDatabase() {
+  return models.Objective.findOrCreate({
+    where: exampleObjective,
+  });
+}
+
+function addProgressUpdateToDatabase() {
+  return models.ProgressUpdate.findOrCreate({
+    where: exampleProgressUpdate,
+  });
+}
 
 module.exports = {
   exampleObjective,
   resetObjectivesTable,
+  resetProgressUpdatesTable,
   addObjectiveToDatabase,
+  addProgressUpdateToDatabase,
 };

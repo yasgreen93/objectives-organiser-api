@@ -2,7 +2,8 @@
 
 * `npm i` to install modules
 * `npm start` to start the server - port is 3000.
-* `npm test` to run mocha unit tests. The server needs to be running in another terminal tab.
+* `npm test` to run mocha unit tests.
+* `nppm run test:watch` to run `--watch` on the tests.
 
 Runs two `postgres` databases:
 * `objectives-organiser_development`
@@ -32,14 +33,15 @@ Tests use `objectives-organiser_test` database and clears and creates a new tabl
 * `GET /objectives/{id}` - read single objective with:
   * `id`
 
-**These endpoints will be edited to be RESTful:**
-* `POST /edit-objective` - edit objective with any of:
+
+* `PATCH /objectives/:id` - edit objective with any of:
   * `title`
   * `type`
   * `totalPagesVideos`
   * `timeAllocated`
 
 
+  _**These endpoints will be edited to be RESTful:**_
 * `POST /delete-objective` - delete objective with:
   * `id`
 
