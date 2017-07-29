@@ -1,7 +1,6 @@
 const app = require('../../app');
 const request = require('supertest');
-const { resetObjectivesTable, exampleObjective } = require('../helpers');
-const models = require('../../server/models/index');
+const { resetObjectivesTable, exampleObjective, addObjectiveToDatabase } = require('../helpers');
 const httpServer = require('http').createServer(app);
 
 before(() => {
@@ -16,7 +15,7 @@ after(() => {
   httpServer.close();
 });
 
-describe('/objectives:', () => {
+describe('/objectives', () => {
   describe('POST /objectives', () => {
     it('can receive POST to /objectives which creates an objective', (done) => {
       request(app)
@@ -48,6 +47,7 @@ describe('/objectives:', () => {
           }
           const { res: response } = res;
           response.statusCode.should.equal(400);
+          response.text.should.equal('"type" is missing or needs to be a string');
           return done();
         });
     });
@@ -55,9 +55,7 @@ describe('/objectives:', () => {
 
   describe('GET /objectives', () => {
     it('can receive a GET to /objectives and find all objectives', (done) => {
-      models.Objective.findOrCreate({
-        where: exampleObjective,
-      })
+      addObjectiveToDatabase()
         .then(() => {
           request(app)
             .get('/objectives')
@@ -92,6 +90,47 @@ describe('/objectives:', () => {
           dataReceived.should.be.empty();
           return done();
         });
+    });
+  });
+
+  describe('PATCH /objectives', () => {
+    it('can receive a PATCH to /objectives to edit an objective', (done) => {
+      addObjectiveToDatabase()
+        .then(() => {
+          request(app)
+            .patch('/objectives/1')
+            .send({ title: 'editing test objective' })
+            .end((err, res) => {
+              if (err) {
+                return done(err);
+              }
+              res.statusCode.should.equal(200);
+              const objective = res.body;
+              objective.title.should.equal('editing test objective');
+              objective.type.should.equal(exampleObjective.type);
+              objective.totalPagesVideos.should.equal(exampleObjective.totalPagesVideos);
+              objective.timeAllocated.should.equal(exampleObjective.timeAllocated);
+              return done();
+            });
+        });
+    });
+    it('should send 400 error if data sent in request is not valid', (done) => {
+      addObjectiveToDatabase()
+        .then(() => {
+          request(app)
+            .patch('/objectives/1')
+            .send({ title: 123 })
+            .end((err, res) => {
+              if (err) {
+                return done(err);
+              }
+              const { res: response } = res;
+              response.statusCode.should.equal(400);
+              response.text.should.equal('"title" needs to be in a string format');
+              return done();
+            });
+        })
+        .catch(error => done(error));
     });
   });
 });
