@@ -1,4 +1,4 @@
-## Objectives Organiser API
+## Objectives Organiser RESTful API
 
 * `npm i` to install modules
 * `npm start` to start the server - port is 3000.
@@ -19,20 +19,20 @@ Tests use `objectives-organiser_test` database and clears and creates a new tabl
 
 
 #### Objectives:
-* `POST /create-objective` - create objective with the data:
+* `POST /objectives` - create objective with the data:
   * `title`
   * `type`
   * `totalPagesVideos`
   * `timeAllocated`
 
 
-* `GET /read-objective` - read single objective with:
+* `GET /objectives` - read all objectives
+
+
+* `GET /objectives/{id}` - read single objective with:
   * `id`
 
-
-* `GET /read-all-objectives` - read all objectives
-
-
+**These endpoints will be edited to be RESTful:**
 * `POST /edit-objective` - edit objective with any of:
   * `title`
   * `type`
