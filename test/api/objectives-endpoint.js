@@ -2,9 +2,18 @@ const app = require('../../app');
 const request = require('supertest');
 const { resetObjectivesTable, exampleObjective } = require('../helpers');
 const models = require('../../server/models/index');
+const httpServer = require('http').createServer(app);
+
+before(() => {
+  httpServer.listen('3001');
+});
 
 beforeEach((done) => {
   resetObjectivesTable(done);
+});
+
+after(() => {
+  httpServer.close();
 });
 
 describe('/objectives:', () => {
