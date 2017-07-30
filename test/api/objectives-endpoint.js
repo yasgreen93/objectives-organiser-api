@@ -1,6 +1,11 @@
 const app = require('../../app');
 const request = require('supertest');
-const { resetObjectivesTable, exampleObjective, addObjectiveToDatabase } = require('../helpers');
+const {
+  resetObjectivesTable,
+  addObjectiveToDatabase,
+  addTwoObjectivesToDatabase,
+  exampleObjectiveBook,
+} = require('../helpers');
 const httpServer = require('http').createServer(app);
 
 before(() => {
@@ -15,12 +20,12 @@ after(() => {
   httpServer.close();
 });
 
-describe('/objectives', () => {
+describe('------ ENDPOINTS: ------', () => {
   describe('POST /objectives', () => {
     it('can receive POST to /objectives which creates an objective', (done) => {
       request(app)
         .post('/objectives')
-        .send(exampleObjective)
+        .send(exampleObjectiveBook)
         .end((err, res) => {
           if (err) {
             return done(err);
@@ -30,9 +35,9 @@ describe('/objectives', () => {
           const responseJson = JSON.parse(response.text);
           const { id, title, type, totalPagesVideos, completed } = responseJson;
           id.should.equal(1);
-          title.should.equal(exampleObjective.title);
-          type.should.equal(exampleObjective.type);
-          totalPagesVideos.should.equal(exampleObjective.totalPagesVideos);
+          title.should.equal(exampleObjectiveBook.title);
+          type.should.equal(exampleObjectiveBook.type);
+          totalPagesVideos.should.equal(exampleObjectiveBook.totalPagesVideos);
           completed.should.equal(false);
           return done();
         });
@@ -55,7 +60,7 @@ describe('/objectives', () => {
 
   describe('GET /objectives', () => {
     it('can receive a GET to /objectives and find all objectives', (done) => {
-      addObjectiveToDatabase()
+      addObjectiveToDatabase('book')
         .then(() => {
           request(app)
             .get('/objectives')
@@ -66,10 +71,10 @@ describe('/objectives', () => {
               const { body: dataReceived } = res;
               res.statusCode.should.equal(200);
               dataReceived[0].id.should.equal(1);
-              dataReceived[0].title.should.equal('test objective');
-              dataReceived[0].type.should.equal('book');
-              dataReceived[0].totalPagesVideos.should.equal(123);
-              dataReceived[0].timeAllocated.should.equal('1 hour per day');
+              dataReceived[0].title.should.equal(exampleObjectiveBook.title);
+              dataReceived[0].type.should.equal(exampleObjectiveBook.type);
+              dataReceived[0].totalPagesVideos.should.equal(exampleObjectiveBook.totalPagesVideos);
+              dataReceived[0].timeAllocated.should.equal(exampleObjectiveBook.timeAllocated);
               dataReceived[0].completed.should.equal(false);
               dataReceived[0].should.have.keys('dateCreated', 'createdAt', 'updatedAt');
               return done();
@@ -77,7 +82,6 @@ describe('/objectives', () => {
         })
         .catch(error => error);
     });
-
     it('sends back empty array if there are no objectives', (done) => {
       request(app)
         .get('/objectives')
@@ -93,9 +97,52 @@ describe('/objectives', () => {
     });
   });
 
+  describe('GET /objectives/:id', () => {
+    it('should retreive an objective with the ID provided if it exists', (done) => {
+      addTwoObjectivesToDatabase()
+        .then(() => {
+          request(app)
+            .get('/objectives/2')
+            .end((err, res) => {
+              if (err) {
+                return done(err);
+              }
+              const { body: dataReceived } = res;
+              res.statusCode.should.equal(200);
+              dataReceived.id.should.equal(2);
+              dataReceived.should.have.keys(
+                'id',
+                'dateCreated',
+                'title',
+                'type',
+                'totalPagesVideos',
+                'timeAllocated',
+                'completed',
+                'createdAt',
+                'updatedAt' // eslint-disable-line comma-dangle
+              );
+              return done();
+            });
+        })
+        .catch(error => done(error));
+    });
+    it('should returns a 404 if there is no data by the ID provided', (done) => {
+      request(app)
+        .get('/objectives/3')
+        .end((err, res) => {
+          if (err) {
+            return done(err);
+          }
+          res.error.status.should.equal(404);
+          res.error.text.should.equal('An objective with the ID: 3 has not been found');
+          return done();
+        });
+    });
+  });
+
   describe('PATCH /objectives', () => {
     it('can receive a PATCH to /objectives to edit an objective', (done) => {
-      addObjectiveToDatabase()
+      addObjectiveToDatabase('book')
         .then(() => {
           request(app)
             .patch('/objectives/1')
@@ -107,15 +154,15 @@ describe('/objectives', () => {
               res.statusCode.should.equal(200);
               const objective = res.body;
               objective.title.should.equal('editing test objective');
-              objective.type.should.equal(exampleObjective.type);
-              objective.totalPagesVideos.should.equal(exampleObjective.totalPagesVideos);
-              objective.timeAllocated.should.equal(exampleObjective.timeAllocated);
+              objective.type.should.equal(exampleObjectiveBook.type);
+              objective.totalPagesVideos.should.equal(exampleObjectiveBook.totalPagesVideos);
+              objective.timeAllocated.should.equal(exampleObjectiveBook.timeAllocated);
               return done();
             });
         });
     });
     it('should send 400 error if data sent in request is not valid', (done) => {
-      addObjectiveToDatabase()
+      addObjectiveToDatabase('book')
         .then(() => {
           request(app)
             .patch('/objectives/1')

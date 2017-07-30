@@ -6,16 +6,18 @@ beforeEach((done) => {
   resetProgressUpdatesTable(done);
 });
 
-describe('Adding a progress update to database', () => {
-  it('should add a new progress to the database', (done) => {
-    addProgressUpdateToDatabase()
-      .then(() => {
-        models.ProgressUpdate.findAll().then((updates) => {
-          updates.length.should.equal(1);
-          done();
+describe('------ PROGRESS UPDATES DATABASE: ------', () => {
+  describe('Adding a progress update to database', () => {
+    it('should add a new progress to the database', (done) => {
+      addProgressUpdateToDatabase()
+        .then(() => {
+          models.ProgressUpdate.findAll().then((updates) => {
+            updates.length.should.equal(1);
+            done();
+          });
+        }).catch((error) => {
+          console.log(`Failed: ${ error }`); // eslint-disable-line no-console
         });
-      }).catch((error) => {
-        console.log(`Failed: ${ error }`); // eslint-disable-line no-console
-      });
+    });
   });
 });
