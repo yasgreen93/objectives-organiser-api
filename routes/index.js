@@ -40,15 +40,7 @@ router.post('/objectives', (req, res) => {
       },
     }).then((response) => {
       const data = response[0].dataValues;
-      res.status(200).send({
-        id: data.id,
-        dateCreated: data.dateCreated,
-        title: data.title,
-        type: data.type,
-        totalPagesVideos: data.totalPagesVideos,
-        timeAllocated: data.timeAllocated,
-        completed: data.completed,
-      });
+      res.status(200).send(data);
     });
 });
 
@@ -136,14 +128,7 @@ router.post('/objectives/:id/progress-updates', (req, res) => {
         })
           .then((response) => {
             const data = response[0].dataValues;
-            res.status(200).send({
-              dateCreated: data.dateCreated,
-              objectiveId: data.objectiveId,
-              pageVideoNumReached: data.pageVideoNumReached,
-              learningSummary: data.learningSummary,
-              updatedAt: data.updatedAt,
-              createdAt: data.createdAt,
-            });
+            res.status(200).send(data);
           }) :
         res.status(404).send(`The objective with an ID of ${ params.id } does not exist`)
       ))
