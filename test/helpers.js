@@ -1,11 +1,20 @@
 const models = require('../server/models/index');
 
-const exampleObjective = {
+const exampleObjectiveBook = {
   dateCreated: new Date(),
-  title: 'test objective',
+  title: 'test objective book',
   type: 'book',
   totalPagesVideos: 123,
   timeAllocated: '1 hour per day',
+  completed: false,
+};
+
+const exampleObjectiveVideo = {
+  dateCreated: new Date(),
+  title: 'test objective video course',
+  type: 'videos',
+  totalPagesVideos: 20,
+  timeAllocated: '1 hour per 2 days',
   completed: false,
 };
 
@@ -33,10 +42,17 @@ function resetProgressUpdatesTable(done) {
     });
 }
 
-function addObjectiveToDatabase() {
+function addObjectiveToDatabase(type) {
+  const exampleObjective = type === 'book' ? exampleObjectiveBook : exampleObjectiveVideo;
   return models.Objective.findOrCreate({
     where: exampleObjective,
   });
+}
+
+function addTwoObjectivesToDatabase() {
+  return addObjectiveToDatabase('book')
+    .then(() => addObjectiveToDatabase('video'))
+    .catch(error => error);
 }
 
 function addProgressUpdateToDatabase() {
@@ -46,9 +62,11 @@ function addProgressUpdateToDatabase() {
 }
 
 module.exports = {
-  exampleObjective,
+  exampleObjectiveBook,
+  exampleObjectiveVideo,
   resetObjectivesTable,
   resetProgressUpdatesTable,
   addObjectiveToDatabase,
+  addTwoObjectivesToDatabase,
   addProgressUpdateToDatabase,
 };

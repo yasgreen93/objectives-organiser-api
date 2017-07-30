@@ -32,7 +32,7 @@ Tests use `objectives-organiser_test` database and clears and creates a new tabl
 * `GET /objectives` - read all objectives
 
 
-* `GET /objectives/{id}` - read single objective with:
+* `GET /objectives/:id` - read single objective with:
   * `id`
 
 

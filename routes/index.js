@@ -56,6 +56,17 @@ router.get('/objectives', (req, res) => {
     .catch(error => error);
 });
 
+// READ A SINGLE OBJECTIVE
+router.get('/objectives/:id', (req, res) => {
+  const { params: { id } } = req;
+  models.Objective.findById(id)
+    .then(objective => (objective ?
+      res.status(200).send(objective.dataValues) :
+      res.status(404).send(`An objective with the ID: ${ id } has not been found`)
+    ))
+    .catch(error => error);
+});
+
 // UPDATE SINGLE OBJECTIVE
 router.patch('/objectives/:id', (req, res) => {
   const { body, params } = req;
