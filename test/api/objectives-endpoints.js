@@ -9,7 +9,7 @@ const {
 const httpServer = require('http').createServer(app);
 
 before(() => {
-  httpServer.listen('3001');
+  httpServer.listen('3002');
 });
 
 beforeEach((done) => {
@@ -20,7 +20,7 @@ after(() => {
   httpServer.close();
 });
 
-describe('------ ENDPOINTS: ------', () => {
+describe('------ OBJECTIVES ENDPOINTS: ------', () => {
   describe('POST /objectives', () => {
     it('can receive POST to /objectives which creates an objective', (done) => {
       request(app)

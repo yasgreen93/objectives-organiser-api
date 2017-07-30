@@ -13,11 +13,10 @@ describe('------ PROGRESS UPDATES DATABASE: ------', () => {
         .then(() => {
           models.ProgressUpdate.findAll().then((updates) => {
             updates.length.should.equal(1);
-            done();
+            return done();
           });
-        }).catch((error) => {
-          console.log(`Failed: ${ error }`); // eslint-disable-line no-console
-        });
+        })
+        .catch(error => done(error));
     });
   });
 });

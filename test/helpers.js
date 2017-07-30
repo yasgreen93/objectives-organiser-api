@@ -64,6 +64,7 @@ function addProgressUpdateToDatabase() {
 module.exports = {
   exampleObjectiveBook,
   exampleObjectiveVideo,
+  exampleProgressUpdate,
   resetObjectivesTable,
   resetProgressUpdatesTable,
   addObjectiveToDatabase,
