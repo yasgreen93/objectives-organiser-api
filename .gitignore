@@ -1,2 +1,6 @@
 node_modules
 npm-debug.log
+coverage/coverage.json
+coverage/lcov.info
+coverage/lcov-report/*
+!coverage/lcov-report/index.html
