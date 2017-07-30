@@ -131,4 +131,26 @@ describe('------ OBJECTIVES DATABASE: ------', () => {
         .catch(error => done(error));
     });
   });
+
+  describe('Deleting an objective', () => {
+    it('should delete an objective with a specific ID', (done) => {
+      addTwoObjectivesToDatabase()
+        .then(() => {
+          models.Objective.destroy({
+            where: { id: 1 },
+          })
+            .then(() => {
+              models.Objective.findAll()
+                .then((objectives) => {
+                  objectives.length.should.equal(1);
+                  objectives[0].dataValues.id.should.equal(2);
+                  return done();
+                })
+                .catch(error => done(error));
+            })
+            .catch(error => done(error));
+        })
+        .catch(error => done(error));
+    });
+  });
 });
