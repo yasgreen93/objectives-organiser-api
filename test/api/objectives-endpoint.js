@@ -126,7 +126,7 @@ describe('------ ENDPOINTS: ------', () => {
         })
         .catch(error => done(error));
     });
-    it('should returns a 404 if there is no data by the ID provided', (done) => {
+    it('should return a 404 if there is no data by the ID provided', (done) => {
       request(app)
         .get('/objectives/3')
         .end((err, res) => {
@@ -140,7 +140,7 @@ describe('------ ENDPOINTS: ------', () => {
     });
   });
 
-  describe('PATCH /objectives', () => {
+  describe('PATCH /objectives/:id', () => {
     it('can receive a PATCH to /objectives to edit an objective', (done) => {
       addObjectiveToDatabase('book')
         .then(() => {
@@ -178,6 +178,37 @@ describe('------ ENDPOINTS: ------', () => {
             });
         })
         .catch(error => done(error));
+    });
+  });
+
+  describe('DELETE /objectives/:id', () => {
+    it('can receive a DELETE request to /objectives/:id to delete an objective', (done) => {
+      addTwoObjectivesToDatabase()
+        .then(() => {
+          request(app)
+            .delete('/objectives/1')
+            .end((err, res) => {
+              if (err) {
+                return done(err);
+              }
+              res.statusCode.should.equal(200);
+              res.text.should.equal('Objective ID: 1 has been deleted successfully.');
+              return done();
+            });
+        })
+        .catch(error => done(error));
+    });
+    it('should return a 404 if there is no data by the ID provided', (done) => {
+      request(app)
+        .delete('/objectives/3')
+        .end((err, res) => {
+          if (err) {
+            return done(err);
+          }
+          res.error.status.should.equal(404);
+          res.error.text.should.equal('An objective with the ID: 3 has not been found');
+          return done();
+        });
     });
   });
 });

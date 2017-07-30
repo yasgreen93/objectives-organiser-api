@@ -90,4 +90,18 @@ router.patch('/objectives/:id', (req, res) => {
       .catch(error => error);
 });
 
+// DELETE SINGLE objective
+router.delete('/objectives/:id', (req, res) => {
+  const { params: { id } } = req;
+  models.Objective.destroy({
+    where: { id },
+  })
+    .then(response => (
+      response === 1 ?
+        res.status(200).send(`Objective ID: ${ id } has been deleted successfully.`) :
+        res.status(404).send(`An objective with the ID: ${ id } has not been found`)
+    ))
+    .catch(error => error);
+});
+
 module.exports = router;

@@ -43,20 +43,24 @@ Tests use `objectives-organiser_test` database and clears and creates a new tabl
   * `timeAllocated`
 
 
-  _**These endpoints will be edited to be RESTful:**_
-* `POST /delete-objective` - delete objective with:
+* `DELETE /objectives/:id` - delete objective with:
   * `id`
 
 
 #### Progress updates:
-* `POST /create-progress-update` - create progress update for single objective:
+* `POST /objectives/:id/progress-updates` - create progress update for single objective:
   * `objectiveId`
   * `pageVideoNumReached`
   * `learningSummary`
 
 
-* `GET /read-progress-updates` - read progress updates for single objective:
+* `GET /objectives/:id/progress-updates` - read progress updates for single objective:
   * `objectiveId`
 
 
-* `GET /read-all-progress-updates` - read all progress updates
+* `GET /objectives/:id/progress-updates/:id` - read a single progress update for a single objective:
+  * `objectiveId`,
+  * `progressUpdateId`
+
+
+* `GET /objectives/progress-updates` - read all progress updates for all objectives.
