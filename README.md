@@ -3,7 +3,9 @@
 * `npm i` to install modules
 * `npm start` to start the server - port is 3000.
 * `npm test` to run mocha unit tests.
-* `nppm run test:watch` to run `--watch` on the tests.
+* `npm run test:watch` to run `--watch` on the tests.
+* To run test coverage locally: `npm run test:coverage`.
+  * Latest test coverage can be found at `./coverage/lcov-report/index.html`.
 
 Runs two `postgres` databases:
 * `objectives-organiser_development`
