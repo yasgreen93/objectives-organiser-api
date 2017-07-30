@@ -46,10 +46,28 @@ const updateDataSchema = schema({
   },
 });
 
-function validateData(objective, schemaType) {
+const progressUpdateSchema = schema({
+  objectiveId: {
+    type: 'number',
+    required: true,
+    message: '"objectiveId" is missing or needs to be a number',
+  },
+  pageVideoNumReached: {
+    type: 'number',
+    required: true,
+    message: '"pageVideoNumReached" is missing or needs to be a number',
+  },
+  learningSummary: {
+    type: 'string',
+    required: true,
+    message: '"learningSummary" is missing or needs to be a string',
+  },
+});
+
+function validateData(dataValues, schemaType) {
   let isValid = true;
   let errorMessage = null;
-  const validatedData = schemaType.validate(objective)[0];
+  const validatedData = schemaType.validate(dataValues)[0];
   if (validatedData) {
     isValid = false;
     errorMessage = validatedData.message;
@@ -61,4 +79,5 @@ module.exports = {
   validateData,
   updateDataSchema,
   objectiveDataSchema,
+  progressUpdateSchema,
 };
