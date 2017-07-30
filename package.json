@@ -5,7 +5,9 @@
   "scripts": {
     "start": "node ./bin/www",
     "test": "NODE_ENV=test mocha",
-    "test:watch": "NODE_ENV=test mocha --watch"
+    "test:watch": "NODE_ENV=test mocha --watch",
+    "test:coverage": "NODE_ENV=test istanbul cover _mocha --dir coverage --recursive test",
+    "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls"
   },
   "pre-commit": "test",
   "dependencies": {
@@ -24,11 +26,13 @@
   },
   "devDependencies": {
     "chai": "^4.1.0",
+    "coveralls": "^2.13.1",
     "eslint": "^4.2.0",
     "eslint-config-airbnb": "^15.1.0",
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-jsx-a11y": "^6.0.2",
     "eslint-plugin-react": "^7.1.0",
+    "istanbul": "^0.4.5",
     "mocha": "^3.4.2",
     "pre-commit": "^1.2.2",
     "requirejs": "^2.3.4",
