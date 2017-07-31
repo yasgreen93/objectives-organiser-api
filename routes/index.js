@@ -13,7 +13,7 @@ router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: false }));
 
 router.get('/', (req, res) => {
-  res.render('index', { title: 'Objective organiser' });
+  res.render('index');
 });
 
 // CREATE OBJECTIVE
@@ -28,7 +28,7 @@ router.post('/objectives', (req, res) => {
   } = req;
   const validatedRequestData = validateData(req.body, objectiveDataSchema);
   return !validatedRequestData.isValid ?
-    res.status(400).send(validatedRequestData.errorMessage) :
+    res.status(400).send(`ERROR 400: ${ validatedRequestData.errorMessage }`) :
     models.Objective.findOrCreate({
       where: {
         dateCreated: new Date(),
@@ -47,9 +47,11 @@ router.post('/objectives', (req, res) => {
 // READ ALL OBJECTIVES
 router.get('/objectives', (req, res) => {
   models.Objective.findAll()
-    .then((objectives) => {
-      res.status(200).send(objectives);
-    })
+    .then(objectives => (
+      objectives.length > 0 ?
+        res.status(200).send(objectives) :
+        res.status(404).send('ERROR 404: No objectives have been found')
+    ))
     .catch(error => error);
 });
 
@@ -59,7 +61,7 @@ router.get('/objectives/:id', (req, res) => {
   models.Objective.findById(id)
     .then(objective => (objective ?
       res.status(200).send(objective.dataValues) :
-      res.status(404).send(`An objective with the ID: ${ id } has not been found`)
+      res.status(404).send(`ERROR 404: An objective with the ID: ${ id } has not been found`)
     ))
     .catch(error => error);
 });
@@ -70,7 +72,7 @@ router.patch('/objectives/:id', (req, res) => {
   const { title, type, totalPagesVideos, timeAllocated } = body || null;
   const validatedUpdateData = validateData(body, updateDataSchema);
   return !validatedUpdateData.isValid ?
-    res.status(400).send(validatedUpdateData.errorMessage) :
+    res.status(400).send(`ERROR 400: ${ validatedUpdateData.errorMessage }`) :
     models.Objective.update({
       title,
       type,
@@ -96,7 +98,7 @@ router.delete('/objectives/:id', (req, res) => {
     .then(response => (
       response === 1 ?
         res.status(200).send(`Objective ID: ${ id } has been deleted successfully.`) :
-        res.status(404).send(`An objective with the ID: ${ id } has not been found`)
+        res.status(404).send(`ERROR 404: An objective with the ID: ${ id } has not been found`)
     ))
     .catch(error => error);
 });
@@ -130,10 +132,12 @@ router.post('/objectives/:id/progress-updates', (req, res) => {
             const data = response[0].dataValues;
             res.status(200).send(data);
           }) :
-        res.status(404).send(`The objective with an ID of ${ params.id } does not exist`)
+        res.status(404).send(`ERROR 404: The objective with an ID of ${ params.id } does not exist`)
       ))
       .catch(error => error) :
-    res.status(400).send(validatedRequestData.errorMessage || nonMatchingIdsError);
+    res.status(400).send(
+      `ERROR 400: ${ validatedRequestData.errorMessage || nonMatchingIdsError }` // eslint-disable-line comma-dangle
+    );
 });
 
 // READING ALL PROGRESS UPDATES FOR A SINGLE OBJECTIVE
@@ -145,7 +149,7 @@ router.get('/objectives/:id/progress-updates', (req, res) => {
     .then(progressUpdates => (
       progressUpdates.length > 0 ?
         res.status(200).send(progressUpdates) :
-        res.status(404).send(`No progress updates for the objective (${ id }) have been found.`)
+        res.status(404).send(`ERROR 404: No progress updates for the objective (${ id }) have been found.`)
     ))
     .catch(error => error);
 });

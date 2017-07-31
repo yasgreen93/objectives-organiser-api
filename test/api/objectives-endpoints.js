@@ -52,7 +52,7 @@ describe('------ OBJECTIVES ENDPOINTS: ------', () => {
           }
           const { res: response } = res;
           response.statusCode.should.equal(400);
-          response.text.should.equal('"type" is missing or needs to be a string');
+          response.text.should.equal('ERROR 400: "type" is missing or needs to be a string');
           return done();
         });
     });
@@ -82,16 +82,15 @@ describe('------ OBJECTIVES ENDPOINTS: ------', () => {
         })
         .catch(error => error);
     });
-    it('sends back empty array if there are no objectives', (done) => {
+    it('returns a 404 with an error message if there are no objectives', (done) => {
       request(app)
         .get('/objectives')
         .end((err, res) => {
           if (err) {
             return done(err);
           }
-          const { body: dataReceived } = res;
-          res.statusCode.should.equal(200);
-          dataReceived.should.be.empty();
+          res.statusCode.should.equal(404);
+          res.text.should.equal('ERROR 404: No objectives have been found');
           return done();
         });
     });
@@ -134,7 +133,7 @@ describe('------ OBJECTIVES ENDPOINTS: ------', () => {
             return done(err);
           }
           res.error.status.should.equal(404);
-          res.error.text.should.equal('An objective with the ID: 3 has not been found');
+          res.error.text.should.equal('ERROR 404: An objective with the ID: 3 has not been found');
           return done();
         });
     });
@@ -173,7 +172,7 @@ describe('------ OBJECTIVES ENDPOINTS: ------', () => {
               }
               const { res: response } = res;
               response.statusCode.should.equal(400);
-              response.text.should.equal('"title" needs to be in a string format');
+              response.text.should.equal('ERROR 400: "title" needs to be in a string format');
               return done();
             });
         })
@@ -206,7 +205,7 @@ describe('------ OBJECTIVES ENDPOINTS: ------', () => {
             return done(err);
           }
           res.error.status.should.equal(404);
-          res.error.text.should.equal('An objective with the ID: 3 has not been found');
+          res.error.text.should.equal('ERROR 404: An objective with the ID: 3 has not been found');
           return done();
         });
     });

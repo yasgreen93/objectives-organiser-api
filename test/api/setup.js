@@ -2,15 +2,15 @@ const app = require('../../app');
 const request = require('supertest');
 
 describe('------ SETUP: ------', () => {
-  it('GET / should return "Objective Organiser"', (done) => {
-    const responseHTML = '<!DOCTYPE html>\n<html>\n  <head>\n    <meta charset="utf-8">\n    <title>ObjectiveOrganiser</title>\n  </head>\n  <body>\n    Objective Organiser\n  </body>\n</html>\n';
+  it('GET / should return a 200 with HTML', (done) => {
     request(app)
       .get('/')
-      .expect(200, responseHTML)
-      .end((err) => {
+      .end((err, res) => {
         if (err) {
           return done(err);
         }
+        res.statusCode.should.equal(200);
+        res.type.should.equal('text/html');
         return done();
       });
   });
