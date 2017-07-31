@@ -25,6 +25,19 @@ const exampleProgressUpdate = {
   learningSummary: 'Learned some stuff',
 };
 
+const exampleProgressUpdateTwo = {
+  dateCreated: new Date(),
+  objectiveId: 2,
+  pageVideoNumReached: 150,
+  learningSummary: 'Learned some more stuff',
+};
+
+const exampleProgressUpdateThree = {
+  dateCreated: new Date(),
+  objectiveId: 2,
+  pageVideoNumReached: 155,
+  learningSummary: 'Learned some more stuff...',
+};
 
 function resetObjectivesTable(done) {
   models.Objective.sync({ force: true })
@@ -61,6 +74,24 @@ function addProgressUpdateToDatabase() {
   });
 }
 
+function addThreeProgressUpdatesToDatabase() {
+  return models.ProgressUpdate.findOrCreate({
+    where: exampleProgressUpdate,
+  })
+    .then(() => (
+      models.ProgressUpdate.findOrCreate({
+        where: exampleProgressUpdateTwo,
+      })
+        .then(() => (
+          models.ProgressUpdate.findOrCreate({
+            where: exampleProgressUpdateThree,
+          })
+        ))
+        .catch(error => error)
+    ))
+    .catch(error => error);
+}
+
 module.exports = {
   exampleObjectiveBook,
   exampleObjectiveVideo,
@@ -70,4 +101,5 @@ module.exports = {
   addObjectiveToDatabase,
   addTwoObjectivesToDatabase,
   addProgressUpdateToDatabase,
+  addThreeProgressUpdatesToDatabase,
 };
