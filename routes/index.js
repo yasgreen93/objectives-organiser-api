@@ -136,4 +136,18 @@ router.post('/objectives/:id/progress-updates', (req, res) => {
     res.status(400).send(validatedRequestData.errorMessage || nonMatchingIdsError);
 });
 
+// READING ALL PROGRESS UPDATES FOR A SINGLE OBJECTIVE
+router.get('/objectives/:id/progress-updates', (req, res) => {
+  const { params: { id } } = req;
+  models.ProgressUpdate.findAll({
+    where: { objectiveId: id },
+  })
+    .then(progressUpdates => (
+      progressUpdates.length > 0 ?
+        res.status(200).send(progressUpdates) :
+        res.status(404).send(`No progress updates for the objective (${ id }) have been found.`)
+    ))
+    .catch(error => error);
+});
+
 module.exports = router;
