@@ -63,7 +63,7 @@ describe('------ PROGRESS UPDATES ENDPOINTS: ------', () => {
               }
               const { res: response } = res;
               response.statusCode.should.equal(400);
-              response.text.should.equal('"objectiveId" is missing or needs to be a number');
+              response.text.should.equal('ERROR 400: "objectiveId" is missing or needs to be a number');
               return done();
             });
         })
@@ -81,7 +81,7 @@ describe('------ PROGRESS UPDATES ENDPOINTS: ------', () => {
               }
               const { res: response } = res;
               response.statusCode.should.equal(400);
-              response.text.should.equal('The objectiveId (2) and the id provided in the request (1) do not match');
+              response.text.should.equal('ERROR 400: The objectiveId (2) and the id provided in the request (1) do not match');
               return done();
             });
         })
@@ -97,7 +97,7 @@ describe('------ PROGRESS UPDATES ENDPOINTS: ------', () => {
           }
           const { res: response } = res;
           response.statusCode.should.equal(404);
-          response.text.should.equal('The objective with an ID of 1 does not exist');
+          response.text.should.equal('ERROR 404: The objective with an ID of 1 does not exist');
           return done();
         });
     });
@@ -139,7 +139,7 @@ describe('------ PROGRESS UPDATES ENDPOINTS: ------', () => {
                 return done(err);
               }
               res.statusCode.should.equal(404);
-              res.text.should.equal('No progress updates for the objective (1) have been found.');
+              res.text.should.equal('ERROR 404: No progress updates for the objective (1) have been found.');
               return done();
             });
         })

@@ -2,9 +2,138 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>ObjectiveOrganiser</title>
+    <title>Objectives Organiser</title>
   </head>
   <body>
-    Objective Organiser
+    <style>
+      body {
+        margin: 2em 0 0 2em;
+        font-family: "Trebuchet MS", Helvetica, sans-serif;
+      }
+      code {
+        background-color: #eaeaea;
+        border-radius: 2px;
+        padding: 3px 4px;
+        display: inline-block;
+        margin-bottom: 5px;
+        box-sizing: border-box;
+      }
+      section {
+        font-size: 0.9em;
+      }
+      h5 {
+        font-size: 1em;
+      }
+      em {
+        margin-bottom: 5px;
+        display: inline-block;
+      }
+      .endpoint {
+        color: #0061f5;
+      }
+      .error-message {
+        color: #ff0000;
+        background-color: #ffe7e8;
+      }
+      .list-item {
+        margin-bottom: 1em;
+      }
+    </style>
+    <h2>Objectives organiser</h2>
+    <h4>The endpoints for this API that are currently available:</h4>
+    <hr />
+    <section>
+      <h5>Objectives endpoints:</h5>
+      <ul>
+        <li class="list-item">
+          <code class="endpoint">POST /objectives</code> -
+          <span>Create objective with the data:</span>
+          <ul>
+            <li>title</li>
+            <li>type</li>
+            <li>totalPagesVideos</li>
+            <li>timeAllocated</li>
+          </ul>
+          <br />
+          <em>If successful it returns JSON of the data added into the DB.</em><br />
+          <em>
+            All fields are required and validated. If one or more is missing or of an incorrect format it will throw a 400 error, for example:
+          </em>
+          <code class="error-message">ERROR 400: "..." is missing or needs to be a ...</code>
+        </li>
+
+        <li class="list-item">
+          <code class="endpoint">GET /objectives</code> -
+          <span>Read all objectives</span>
+          <br /><br />
+          <em>If no objectives exists it should send a 404 error:</em>
+          <code class="error-message">ERROR 404: No objectives have been found</code>
+        </li>
+
+        <li class="list-item">
+          <code class="endpoint">GET /objectives/:id</code> -
+          <span>Read a single objective with a specific ID</span>
+          <br /><br />
+          <em>If successful it returns JSON of the data.</em><br />
+          <em>If no objectives exists it should send a 404 error:</em>
+          <code class="error-message">ERROR 404: An objective with the ID: # has not been found</code>
+        </li>
+
+        <li class="list-item">
+          <code class="endpoint">PATCH /objectives/:id</code> -
+          <span>Edit objective with any of:</span>
+          <ul>
+            <li>title</li>
+            <li>type</li>
+            <li>totalPagesVideos</li>
+            <li>timeAllocated</li>
+          </ul>
+          <br />
+          <em>If successful it returns JSON of the updated data.</em><br />
+          <em>All fields are validated. If one or more of an incorrect format it will throw a 400 error, for example:</em>
+          <code class="error-message">ERROR 400: "..." needs to be in a ... format</code>
+        </li>
+
+        <li class="list-item">
+          <code class="endpoint">DELETE /objectives/:id</code> -
+          <span>Delete a single objective with a specific ID</span>
+          <br /><br />
+          <em>If successful it returns a confirmation message.</em><br />
+          <em>If unsuccessful it returns a 404 error, for example:</em>
+          <code class="error-message">ERROR 404: An objective with the ID: # has not been found</code>
+        </li>
+      </ul>
+      <hr />
+    </section>
+
+    <section>
+      <h5>Progress updates endpoints:</h5>
+      <ul>
+        <li class="list-item">
+          <code class="endpoint">POST /objectives/:id/progress-updates</code> -
+          <span>Create a progress update for single objective:</span>
+          <ul>
+            <li>objectiveId</li>
+            <li>pageVideoNumReached</li>
+            <li>learningSummary</li>
+          </ul>
+          <br />
+          <em>If successful it returns JSON of the data added into the DB.</em><br />
+          <em>
+            All fields are required and validated. If one or more is missing or of an incorrect format it will throw a 400 error message, for example:
+          </em>
+          <code class="error-message">ERROR 400: "..." is missing or needs to be a ...</code>
+        </li>
+
+        <li class="list-item">
+          <code class="endpoint">GET /objectives/:id/progress-updates</code> -
+          <span>Read progress updates for single objective</span>
+          <br /><br />
+          <em>If successful it returns JSON of the data.</em><br />
+          <em>If unsuccessful it returns a 404 with the error message:</em>
+          <code class="error-message">ERROR 404: No progress updates for the objective (#) have been found.</code>
+        </li>
+      </ul>
+    </section>
   </body>
 </html>
