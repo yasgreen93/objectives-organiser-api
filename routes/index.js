@@ -154,4 +154,17 @@ router.get('/objectives/:id/progress-updates', (req, res) => {
     .catch(error => error);
 });
 
+// READ ALL PROGRESS UPDATES
+router.get('/objectives/progress-updates', (req, res) => {
+  console.log('---req', req);
+  models.ProgressUpdate.findAll()
+    .then((progressUpdates) => {
+      console.log('---progressUpdates', progressUpdates);
+      return progressUpdates.length > 0 ?
+        res.status(200).send(progressUpdates) :
+        res.status(404).send('No progress updates were found')
+    })
+    .catch(error => error);
+});
+
 module.exports = router;

@@ -146,4 +146,36 @@ describe('------ PROGRESS UPDATES ENDPOINTS: ------', () => {
         .catch(error => done(error));
     });
   });
+
+  // describe('GET /objectives/progress-updates', () => {
+  //   it.only('should get all progress updates', (done) => {
+  //     addThreeProgressUpdatesToDatabase()
+  //       .then(() => {
+  //         request(app)
+  //           .get('/objectives/progress-updates')
+  //           .end((err, res) => {
+  //             if (err) {
+  //               return done(err);
+  //             }
+  //             console.log('---res', res);
+  //             res.statusCode.should.equal(200);
+  //             res.body.length.should.equal(3);
+  //             return done();
+  //           });
+  //       })
+  //       .catch(error => done(error));
+  //   });
+  //   it('should return a 404 if there are no progress updates and an error message', (done) => {
+  //     request(app)
+  //       .get('/objectives/progress-updates')
+  //       .end((err, res) => {
+  //         if (err) {
+  //           return done(err);
+  //         }
+  //         res.statusCode.should.equal(404);
+  //         res.text.should.equal('No progress updates were found');
+  //         return done();
+  //       });
+  //   });
+  // });
 });
