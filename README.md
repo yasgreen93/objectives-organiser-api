@@ -90,8 +90,8 @@ Tests use `objectives-organiser_test` database and clears and creates a new tabl
 ---
 
 * `PATCH /progress-updates/:id` - edit progress update with any of:
-* `pageVideoNumReached`
-* `learningSummary`
+  * `pageVideoNumReached`
+  * `learningSummary`
 
 *N.B. the objectiveID of a progress update can not be edited once created.*
 

@@ -126,4 +126,36 @@ describe('------ PROGRESS UPDATES DATABASE: ------', () => {
         .catch(error => done(error));
     });
   });
+
+  describe('Deleting a progress update', () => {
+    it('should delete a progress update with a specific ID', (done) => {
+      addThreeProgressUpdatesToDatabase()
+        .then(() => {
+          models.ProgressUpdate.destroy({
+            where: { id: 1 },
+          })
+            .then(() => {
+              models.ProgressUpdate.findAll()
+                .then((progressUpdates) => {
+                  progressUpdates.length.should.equal(2);
+                  progressUpdates[0].dataValues.id.should.equal(2);
+                  return done();
+                })
+                .catch(error => done(error));
+            })
+            .catch(error => done(error));
+        })
+        .catch(error => done(error));
+    });
+    it('should return 0 if no progress update with the ID provided exists', (done) => {
+      models.ProgressUpdate.destroy({
+        where: { id: 1 },
+      })
+        .then((response) => {
+          response.should.equal(0);
+          return done();
+        })
+        .catch(error => done(error));
+    });
+  });
 });
