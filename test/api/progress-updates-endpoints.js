@@ -5,6 +5,7 @@ const {
   addObjectiveToDatabase,
   exampleProgressUpdate,
   addTwoObjectivesToDatabase,
+  addProgressUpdateToDatabase,
   addThreeProgressUpdatesToDatabase,
 } = require('../helpers');
 const httpServer = require('http').createServer(app);
@@ -204,6 +205,59 @@ describe('------ PROGRESS UPDATES ENDPOINTS: ------', () => {
           }
           res.statusCode.should.equal(200);
           res.body.should.be.empty();
+          return done();
+        });
+    });
+  });
+
+  describe('PATCH /progress-updates/:id', () => {
+    it('can receive a PATCH to /progress-updates/:id to edit an objective', (done) => {
+      addProgressUpdateToDatabase()
+        .then(() => {
+          request(app)
+            .patch('/progress-updates/1')
+            .send({ pageVideoNumReached: 222 })
+            .end((err, res) => {
+              if (err) {
+                return done(err);
+              }
+              res.statusCode.should.equal(200);
+              const progressUpdate = res.body;
+              progressUpdate.pageVideoNumReached.should.equal(222);
+              progressUpdate.objectiveId.should.equal(exampleProgressUpdate.objectiveId);
+              progressUpdate.learningSummary.should.equal(exampleProgressUpdate.learningSummary);
+              return done();
+            });
+        });
+    });
+    it('should send 400 error if data sent in request is not valid', (done) => {
+      addProgressUpdateToDatabase()
+        .then(() => {
+          request(app)
+            .patch('/progress-updates/1')
+            .send({ pageVideoNumReached: '123' })
+            .end((err, res) => {
+              if (err) {
+                return done(err);
+              }
+              const { res: response } = res;
+              response.statusCode.should.equal(400);
+              response.text.should.equal('ERROR 400: "pageVideoNumReached" needs to be in a number format');
+              return done();
+            });
+        })
+        .catch(error => done(error));
+    });
+    it('should send a 404 if the objective does not exist', (done) => {
+      request(app)
+        .patch('/progress-updates/1')
+        .send({ title: '123' })
+        .end((err, res) => {
+          if (err) {
+            return done(err);
+          }
+          res.statusCode.should.equal(404);
+          res.text.should.equal('ERROR 404: A progress update with the ID of 1 does not exist');
           return done();
         });
     });

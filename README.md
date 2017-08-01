@@ -86,3 +86,26 @@ Tests use `objectives-organiser_test` database and clears and creates a new tabl
 ---
 
 * `GET /progress-updates` - read all progress updates for all objectives.
+
+---
+
+* `PATCH /progress-updates/:id` - edit progress update with any of:
+* `pageVideoNumReached`
+* `learningSummary`
+
+*N.B. the objectiveID of a progress update can not be edited once created.*
+
+*If successful it returns JSON of the updated data.*
+
+*If the progress update being updated does not exist it returns a 404 with:* `ERROR 404: A progress update with the ID of # does not exist`
+
+*All fields are validated. If one or more of an incorrect format it will throw a 400 error, for example:* `ERROR 400: "..." needs to be in a ... format`
+
+---
+
+* `DELETE /progress-updates/:id` - delete progress update with:
+  * `id`
+
+*If successful it returns a confirmation message.*
+
+*If unsuccessful it returns a 404 error, for example:* `ERROR 404: A progress update with the ID: # has not been found`

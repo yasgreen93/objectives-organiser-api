@@ -5,6 +5,7 @@ const {
   validateData,
   objectiveDataSchema,
   updateDataSchema,
+  updateProgressUpdateSchema,
   progressUpdateSchema,
 } = require('./validation');
 
@@ -157,5 +158,27 @@ router.get('/progress-updates', (req, res) => {
     .then(progressUpdates => (res.status(200).send(progressUpdates)))
     .catch(error => error);
 });
+
+// UPDATE SINGLE PROGRESS UPDATE
+router.patch('/progress-updates/:id', (req, res) => {
+  const { body, params } = req;
+  const { pageVideoNumReached, learningSummary } = body || null;
+  const validatedUpdateData = validateData(body, updateProgressUpdateSchema);
+  return !validatedUpdateData.isValid ?
+    res.status(400).send(`ERROR 400: ${ validatedUpdateData.errorMessage }`) :
+    models.ProgressUpdate.update({
+      pageVideoNumReached,
+      learningSummary,
+    }, {
+      where: { id: params.id },
+      returning: true,
+    })
+      .then(objectives => (objectives[1].length > 0 ?
+        res.status(200).send(objectives[1][0]) :
+        res.status(404).send(`ERROR 404: A progress update with the ID of ${ params.id } does not exist`)
+      ))
+      .catch(error => error);
+});
+
 
 module.exports = router;
