@@ -109,3 +109,8 @@ Tests use `objectives-organiser_test` database and clears and creates a new tabl
 *If successful it returns a confirmation message.*
 
 *If unsuccessful it returns a 404 error, for example:* `ERROR 404: A progress update with the ID: # has not been found`
+
+---
+
+### MVP test coverage:
+Image can be found at: `./mvp-test-coverage.png`.
