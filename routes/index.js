@@ -143,6 +143,14 @@ router.get('/objectives/:id/progress-updates', (req, res) => {
     .catch(error => error);
 });
 
+// READING AN SINGLE PROGRESS UPDATE
+router.get('/progress-updates/:id', (req, res) => {
+  const { params: { id } } = req;
+  models.ProgressUpdate.findById(id)
+    .then(progressUpdate => (res.status(200).send(progressUpdate)))
+    .catch(error => error);
+});
+
 // READ ALL PROGRESS UPDATES
 router.get('/progress-updates', (req, res) => {
   models.ProgressUpdate.findAll()

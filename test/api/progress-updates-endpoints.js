@@ -147,7 +147,38 @@ describe('------ PROGRESS UPDATES ENDPOINTS: ------', () => {
     });
   });
 
-  describe('GET /objectives/progress-updates', () => {
+  describe('GET /progress-updates/:id', () => {
+    it('should retreive a single progress update with the ID provided in the params', (done) => {
+      addThreeProgressUpdatesToDatabase()
+        .then(() => {
+          request(app)
+            .get('/progress-updates/2')
+            .end((err, res) => {
+              if (err) {
+                return done(err);
+              }
+              res.statusCode.should.equal(200);
+              res.body.id.should.equal(2);
+              return done();
+            });
+        })
+        .catch(error => done(error));
+    });
+    it('should should send a 200 with an empty array if no progress udpate with that ID exists', (done) => {
+      request(app)
+        .get('/objectives/1/progress-updates')
+        .end((err, res) => {
+          if (err) {
+            return done(err);
+          }
+          res.statusCode.should.equal(200);
+          res.body.should.be.empty();
+          return done();
+        });
+    });
+  });
+
+  describe('GET /progress-updates', () => {
     it('should get all progress updates', (done) => {
       addThreeProgressUpdatesToDatabase()
         .then(() => {

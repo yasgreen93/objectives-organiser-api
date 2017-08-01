@@ -29,9 +29,7 @@ describe('------ PROGRESS UPDATES DATABASE: ------', () => {
       addThreeProgressUpdatesToDatabase()
         .then(() => {
           models.ProgressUpdate.findAll({
-            where: {
-              objectiveId: 2,
-            },
+            where: { objectiveId: 2 },
           })
             .then((progressUpdate) => {
               progressUpdate.length.should.equal(2);
@@ -42,6 +40,39 @@ describe('------ PROGRESS UPDATES DATABASE: ------', () => {
               return done();
             })
             .catch(error => done(error));
+        })
+        .catch(error => done(error));
+    });
+    it('should return an empty array if none exist for that objective', (done) => {
+      models.ProgressUpdate.findAll({
+        where: { objectiveId: 1 },
+      })
+        .then((progressUpdates) => {
+          progressUpdates.should.be.empty();
+          return done();
+        })
+        .catch(error => done(error));
+    });
+  });
+
+  describe('Reading a single progress update', () => {
+    it('should fetch a single prgoress update with the ID given', (done) => {
+      addThreeProgressUpdatesToDatabase()
+        .then(() => {
+          models.ProgressUpdate.findById(2)
+            .then((progressUpdate) => {
+              progressUpdate.dataValues.id.should.equal(2);
+              return done();
+            })
+            .catch(error => done(error));
+        })
+        .catch(error => done(error));
+    });
+    it('should return null none exists by the ID given', (done) => {
+      models.ProgressUpdate.findById(1)
+        .then((progressUpdate) => {
+          (progressUpdate === null).should.equal(true);
+          return done();
         })
         .catch(error => done(error));
     });

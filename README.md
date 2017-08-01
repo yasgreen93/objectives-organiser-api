@@ -80,8 +80,7 @@ Tests use `objectives-organiser_test` database and clears and creates a new tabl
   * `objectiveId`
 
 ---
-* `GET /objectives/:id/progress-updates/:id` - read a single progress update for a single objective:
-  * `objectiveId`,
+* `GET //progress-updates/:id` - read a single progress update for a single objective:
   * `progressUpdateId`
 
 ---

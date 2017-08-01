@@ -48,21 +48,18 @@ describe('------ OBJECTIVES DATABASE: ------', () => {
               objectives[0].dataValues.id.should.equal(1);
               objectives[0].dataValues.type.should.equal(exampleObjectiveBook.type);
               objectives[1].dataValues.id.should.equal(2);
-              objectives[1].dataValues.should.have.keys(
-                'id',
-                'dateCreated',
-                'title',
-                'type',
-                'totalPagesVideos',
-                'timeAllocated',
-                'completed',
-                'createdAt',
-                'updatedAt' // eslint-disable-line comma-dangle
-              );
               objectives[1].dataValues.type.should.equal(exampleObjectiveVideo.type);
               return done();
             })
             .catch(error => done(error));
+        })
+        .catch(error => done(error));
+    });
+    it('should return an empty array if none exist', (done) => {
+      models.Objective.findAll()
+        .then((objectives) => {
+          objectives.should.be.empty();
+          return done();
         })
         .catch(error => done(error));
     });
@@ -130,6 +127,18 @@ describe('------ OBJECTIVES DATABASE: ------', () => {
         })
         .catch(error => done(error));
     });
+    it('should return [ 0 ] if no objective with the ID provided exists', (done) => {
+      models.Objective.update({
+        title: 'editing title',
+      }, {
+        where: { id: 1 },
+      })
+        .then((response) => {
+          response[0].should.equal(0);
+          return done();
+        })
+        .catch(error => done(error));
+    });
   });
 
   describe('Deleting an objective', () => {
@@ -149,6 +158,16 @@ describe('------ OBJECTIVES DATABASE: ------', () => {
                 .catch(error => done(error));
             })
             .catch(error => done(error));
+        })
+        .catch(error => done(error));
+    });
+    it('should return 0 if no objective with the ID provided exists', (done) => {
+      models.Objective.destroy({
+        where: { id: 1 },
+      })
+        .then((response) => {
+          response.should.equal(0);
+          return done();
         })
         .catch(error => done(error));
     });
