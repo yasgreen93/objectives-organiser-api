@@ -49,6 +49,8 @@ Tests use `objectives-organiser_test` database and clears and creates a new tabl
 
 *If successful it returns JSON of the updated data.*
 
+*If the objective being updated does not exist it returns a 404 with:* `ERROR 404: An objective with the ID of # does not exist`
+
 *All fields are validated. If one or more of an incorrect format it will throw a 400 error, for example:* `ERROR 400: "..." needs to be in a ... format`
 
 ---

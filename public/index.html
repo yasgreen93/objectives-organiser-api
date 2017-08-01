@@ -83,6 +83,8 @@
           </ul>
           <br />
           <em>If successful it returns JSON of the updated data.</em><br />
+          <em>If the objective being updated does not exist it returns a 404 with:</em>
+          <code class="error-message">ERROR 404: An objective with the ID of # does not exist</code>
           <em>All fields are validated. If one or more of an incorrect format it will throw a 400 error, for example:</em>
           <code class="error-message">ERROR 400: "..." needs to be in a ... format</code>
         </li>
