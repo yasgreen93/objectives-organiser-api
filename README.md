@@ -113,4 +113,4 @@ Tests use `objectives-organiser_test` database and clears and creates a new tabl
 ---
 
 ### MVP test coverage:
-![https://github.com/yasgreen93/objectives-organiser-api/blob/master/mvp-test-coverage.png](mvp test coverage)
+An image of the all tests passing and test coverage can be found at `./mpv-test-coverage.png`
