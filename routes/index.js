@@ -47,11 +47,7 @@ router.post('/objectives', (req, res) => {
 // READ ALL OBJECTIVES
 router.get('/objectives', (req, res) => {
   models.Objective.findAll()
-    .then(objectives => (
-      objectives.length > 0 ?
-        res.status(200).send(objectives) :
-        res.status(404).send('ERROR 404: No objectives have been found')
-    ))
+    .then(objectives => (res.status(200).send(objectives)))
     .catch(error => error);
 });
 
@@ -59,10 +55,7 @@ router.get('/objectives', (req, res) => {
 router.get('/objectives/:id', (req, res) => {
   const { params: { id } } = req;
   models.Objective.findById(id)
-    .then(objective => (objective ?
-      res.status(200).send(objective.dataValues) :
-      res.status(404).send(`ERROR 404: An objective with the ID: ${ id } has not been found`)
-    ))
+    .then(objective => (res.status(200).send(objective)))
     .catch(error => error);
 });
 
@@ -82,10 +75,10 @@ router.patch('/objectives/:id', (req, res) => {
       where: { id: params.id },
       returning: true,
     })
-      .then((objectives) => {
-        const updatedObjective = objectives[1][0].dataValues;
-        res.status(200).send(updatedObjective);
-      })
+      .then(objectives => (objectives[1].length > 0 ?
+        res.status(200).send(objectives[1][0]) :
+        res.status(404).send(`ERROR 404: An objective with the ID of ${ params.id } does not exist`)
+      ))
       .catch(error => error);
 });
 
@@ -146,24 +139,14 @@ router.get('/objectives/:id/progress-updates', (req, res) => {
   models.ProgressUpdate.findAll({
     where: { objectiveId: id },
   })
-    .then(progressUpdates => (
-      progressUpdates.length > 0 ?
-        res.status(200).send(progressUpdates) :
-        res.status(404).send(`ERROR 404: No progress updates for the objective (${ id }) have been found.`)
-    ))
+    .then(progressUpdates => (res.status(200).send(progressUpdates)))
     .catch(error => error);
 });
 
 // READ ALL PROGRESS UPDATES
-router.get('/objectives/progress-updates', (req, res) => {
-  console.log('---req', req);
+router.get('/progress-updates', (req, res) => {
   models.ProgressUpdate.findAll()
-    .then((progressUpdates) => {
-      console.log('---progressUpdates', progressUpdates);
-      return progressUpdates.length > 0 ?
-        res.status(200).send(progressUpdates) :
-        res.status(404).send('No progress updates were found')
-    })
+    .then(progressUpdates => (res.status(200).send(progressUpdates)))
     .catch(error => error);
 });
 

@@ -129,7 +129,7 @@ describe('------ PROGRESS UPDATES ENDPOINTS: ------', () => {
         })
         .catch(error => done(error));
     });
-    it('should should send a 404 if no progress updates for that objective ID exist', (done) => {
+    it('should should send a 200 with an empty array if no progress udpates for that objective exist', (done) => {
       addTwoObjectivesToDatabase()
         .then(() => {
           request(app)
@@ -138,8 +138,8 @@ describe('------ PROGRESS UPDATES ENDPOINTS: ------', () => {
               if (err) {
                 return done(err);
               }
-              res.statusCode.should.equal(404);
-              res.text.should.equal('ERROR 404: No progress updates for the objective (1) have been found.');
+              res.statusCode.should.equal(200);
+              res.body.should.be.empty();
               return done();
             });
         })
@@ -147,35 +147,34 @@ describe('------ PROGRESS UPDATES ENDPOINTS: ------', () => {
     });
   });
 
-  // describe('GET /objectives/progress-updates', () => {
-  //   it.only('should get all progress updates', (done) => {
-  //     addThreeProgressUpdatesToDatabase()
-  //       .then(() => {
-  //         request(app)
-  //           .get('/objectives/progress-updates')
-  //           .end((err, res) => {
-  //             if (err) {
-  //               return done(err);
-  //             }
-  //             console.log('---res', res);
-  //             res.statusCode.should.equal(200);
-  //             res.body.length.should.equal(3);
-  //             return done();
-  //           });
-  //       })
-  //       .catch(error => done(error));
-  //   });
-  //   it('should return a 404 if there are no progress updates and an error message', (done) => {
-  //     request(app)
-  //       .get('/objectives/progress-updates')
-  //       .end((err, res) => {
-  //         if (err) {
-  //           return done(err);
-  //         }
-  //         res.statusCode.should.equal(404);
-  //         res.text.should.equal('No progress updates were found');
-  //         return done();
-  //       });
-  //   });
-  // });
+  describe('GET /objectives/progress-updates', () => {
+    it('should get all progress updates', (done) => {
+      addThreeProgressUpdatesToDatabase()
+        .then(() => {
+          request(app)
+            .get('/progress-updates')
+            .end((err, res) => {
+              if (err) {
+                return done(err);
+              }
+              res.statusCode.should.equal(200);
+              res.body.length.should.equal(3);
+              return done();
+            });
+        })
+        .catch(error => done(error));
+    });
+    it('should return a 200 with an empty array if there are no progress updates', (done) => {
+      request(app)
+        .get('/progress-updates')
+        .end((err, res) => {
+          if (err) {
+            return done(err);
+          }
+          res.statusCode.should.equal(200);
+          res.body.should.be.empty();
+          return done();
+        });
+    });
+  });
 });

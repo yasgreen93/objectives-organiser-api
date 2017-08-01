@@ -82,15 +82,15 @@ describe('------ OBJECTIVES ENDPOINTS: ------', () => {
         })
         .catch(error => error);
     });
-    it('returns a 404 with an error message if there are no objectives', (done) => {
+    it('returns a 200 with an empty array if there are no objectives', (done) => {
       request(app)
         .get('/objectives')
         .end((err, res) => {
           if (err) {
             return done(err);
           }
-          res.statusCode.should.equal(404);
-          res.text.should.equal('ERROR 404: No objectives have been found');
+          res.statusCode.should.equal(200);
+          res.body.should.be.empty();
           return done();
         });
     });
@@ -125,15 +125,15 @@ describe('------ OBJECTIVES ENDPOINTS: ------', () => {
         })
         .catch(error => done(error));
     });
-    it('should return a 404 if there is no data by the ID provided', (done) => {
+    it('should return a 200 with an empty array if there is no data by the ID provided', (done) => {
       request(app)
         .get('/objectives/3')
         .end((err, res) => {
           if (err) {
             return done(err);
           }
-          res.error.status.should.equal(404);
-          res.error.text.should.equal('ERROR 404: An objective with the ID: 3 has not been found');
+          res.statusCode.should.equal(200);
+          res.body.should.be.empty();
           return done();
         });
     });
@@ -177,6 +177,19 @@ describe('------ OBJECTIVES ENDPOINTS: ------', () => {
             });
         })
         .catch(error => done(error));
+    });
+    it('should send a 404 if the objective does not exist', (done) => {
+      request(app)
+        .patch('/objectives/1')
+        .send({ title: '123' })
+        .end((err, res) => {
+          if (err) {
+            return done(err);
+          }
+          res.statusCode.should.equal(404);
+          res.text.should.equal('ERROR 404: An objective with the ID of 1 does not exist');
+          return done();
+        });
     });
   });
 
