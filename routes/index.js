@@ -162,10 +162,11 @@ router.get('/progress-updates', (req, res) => {
 // UPDATE SINGLE PROGRESS UPDATE
 router.patch('/progress-updates/:id', (req, res) => {
   const { body, params } = req;
-  const { pageVideoNumReached, learningSummary } = body || null;
+  const { pageVideoNumReached, learningSummary, objectiveId } = body || null;
+  const objectiveIdError = 'The objectiveId cannot be updated once added';
   const validatedUpdateData = validateData(body, updateProgressUpdateSchema);
-  return !validatedUpdateData.isValid ?
-    res.status(400).send(`ERROR 400: ${ validatedUpdateData.errorMessage }`) :
+  return !validatedUpdateData.isValid || objectiveId ?
+    res.status(400).send(`ERROR 400: ${ validatedUpdateData.errorMessage || objectiveIdError }`) :
     models.ProgressUpdate.update({
       pageVideoNumReached,
       learningSummary,

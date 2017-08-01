@@ -248,7 +248,7 @@ describe('------ PROGRESS UPDATES ENDPOINTS: ------', () => {
         })
         .catch(error => done(error));
     });
-    it('should send a 404 if the objective does not exist', (done) => {
+    it('should send a 404 if the progress update does not exist', (done) => {
       request(app)
         .patch('/progress-updates/1')
         .send({ title: '123' })
@@ -258,6 +258,19 @@ describe('------ PROGRESS UPDATES ENDPOINTS: ------', () => {
           }
           res.statusCode.should.equal(404);
           res.text.should.equal('ERROR 404: A progress update with the ID of 1 does not exist');
+          return done();
+        });
+    });
+    it('should send a 400 error if a user tries to update the objectiveID', (done) => {
+      request(app)
+        .patch('/progress-updates/1')
+        .send({ objectiveId: 2 })
+        .end((err, res) => {
+          if (err) {
+            return done(err);
+          }
+          res.statusCode.should.equal(400);
+          res.text.should.equal('ERROR 400: The objectiveId cannot be updated once added');
           return done();
         });
     });
