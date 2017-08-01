@@ -91,4 +91,39 @@ describe('------ PROGRESS UPDATES DATABASE: ------', () => {
         });
     });
   });
+
+  describe('Updating a progress update', () => {
+    it('should update a progress update with a specific ID', (done) => {
+      addProgressUpdateToDatabase()
+        .then(() => {
+          models.ProgressUpdate.update({
+            pageVideoNumReached: 1234,
+          }, {
+            where: { id: 1 },
+          })
+            .then(() => {
+              models.ProgressUpdate.findAll()
+                .then((progressUpdates) => {
+                  progressUpdates[0].dataValues.pageVideoNumReached.should.equal(1234);
+                  return done();
+                })
+                .catch(error => done(error));
+            })
+            .catch(error => done(error));
+        })
+        .catch(error => done(error));
+    });
+    it('should return [ 0 ] if no progress update with the ID provided exists', (done) => {
+      models.ProgressUpdate.update({
+        pageVideoNumReached: 125,
+      }, {
+        where: { id: 1 },
+      })
+        .then((response) => {
+          response[0].should.equal(0);
+          return done();
+        })
+        .catch(error => done(error));
+    });
+  });
 });

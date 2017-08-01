@@ -64,6 +64,19 @@ const progressUpdateSchema = schema({
   },
 });
 
+const updateProgressUpdateSchema = schema({
+  pageVideoNumReached: {
+    type: 'number',
+    required: false,
+    message: '"pageVideoNumReached" needs to be in a number format',
+  },
+  learningSummary: {
+    type: 'string',
+    required: false,
+    message: '"learningSummary" needs to be in a string format',
+  },
+});
+
 function validateData(dataValues, schemaType) {
   let isValid = true;
   let errorMessage = null;
@@ -78,6 +91,7 @@ function validateData(dataValues, schemaType) {
 module.exports = {
   validateData,
   updateDataSchema,
+  updateProgressUpdateSchema,
   objectiveDataSchema,
   progressUpdateSchema,
 };
