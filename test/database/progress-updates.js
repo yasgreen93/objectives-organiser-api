@@ -46,4 +46,18 @@ describe('------ PROGRESS UPDATES DATABASE: ------', () => {
         .catch(error => done(error));
     });
   });
+
+  describe('Reading all progress updates', () => {
+    it('should retreive all progress updates', (done) => {
+      addThreeProgressUpdatesToDatabase()
+        .then(() => {
+          models.ProgressUpdate.findAll()
+            .then((progressUpdates) => {
+              progressUpdates.length.should.equal(3);
+              return done();
+            })
+            .catch(error => done(error));
+        });
+    });
+  });
 });

@@ -65,18 +65,11 @@
         <li class="list-item">
           <code class="endpoint">GET /objectives</code> -
           <span>Read all objectives</span>
-          <br /><br />
-          <em>If no objectives exists it should send a 404 error:</em>
-          <code class="error-message">ERROR 404: No objectives have been found</code>
         </li>
 
         <li class="list-item">
           <code class="endpoint">GET /objectives/:id</code> -
           <span>Read a single objective with a specific ID</span>
-          <br /><br />
-          <em>If successful it returns JSON of the data.</em><br />
-          <em>If no objectives exists it should send a 404 error:</em>
-          <code class="error-message">ERROR 404: An objective with the ID: # has not been found</code>
         </li>
 
         <li class="list-item">
@@ -90,6 +83,8 @@
           </ul>
           <br />
           <em>If successful it returns JSON of the updated data.</em><br />
+          <em>If the objective being updated does not exist it returns a 404 with:</em>
+          <code class="error-message">ERROR 404: An objective with the ID of # does not exist</code>
           <em>All fields are validated. If one or more of an incorrect format it will throw a 400 error, for example:</em>
           <code class="error-message">ERROR 400: "..." needs to be in a ... format</code>
         </li>
@@ -128,10 +123,11 @@
         <li class="list-item">
           <code class="endpoint">GET /objectives/:id/progress-updates</code> -
           <span>Read progress updates for single objective</span>
-          <br /><br />
-          <em>If successful it returns JSON of the data.</em><br />
-          <em>If unsuccessful it returns a 404 with the error message:</em>
-          <code class="error-message">ERROR 404: No progress updates for the objective (#) have been found.</code>
+        </li>
+
+        <li class="list-item">
+          <code class="endpoint">GET /progress-updates</code> -
+          <span>Read all progress updates</span>
         </li>
       </ul>
     </section>

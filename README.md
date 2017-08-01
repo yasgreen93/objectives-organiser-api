@@ -34,16 +34,10 @@ Tests use `objectives-organiser_test` database and clears and creates a new tabl
 
 * `GET /objectives` - read all objectives
 
-*If no objectives exists it should send a 404 error:* `ERROR 404: No objectives have been found`
-
 ---
 
 * `GET /objectives/:id` - read single objective with:
   * `id`
-
-*If successful it returns JSON of the data.*
-
-*If no objectives exists it should send a 404 error:* `ERROR 404: An objective with the ID: # has not been found`
 
 ---
 
@@ -54,6 +48,8 @@ Tests use `objectives-organiser_test` database and clears and creates a new tabl
   * `timeAllocated`
 
 *If successful it returns JSON of the updated data.*
+
+*If the objective being updated does not exist it returns a 404 with:* `ERROR 404: An objective with the ID of # does not exist`
 
 *All fields are validated. If one or more of an incorrect format it will throw a 400 error, for example:* `ERROR 400: "..." needs to be in a ... format`
 
@@ -83,15 +79,11 @@ Tests use `objectives-organiser_test` database and clears and creates a new tabl
 * `GET /objectives/:id/progress-updates` - read progress updates for single objective:
   * `objectiveId`
 
-*If successful it returns JSON of the data.*
-*If unsuccessful it returns a 404 with the error message:* `ERROR 404: No progress updates for the objective (#) have been found.`
-
 ---
-***The last two will be updated when implemented:***
 * `GET /objectives/:id/progress-updates/:id` - read a single progress update for a single objective:
   * `objectiveId`,
   * `progressUpdateId`
 
 ---
 
-* `GET /objectives/progress-updates` - read all progress updates for all objectives.
+* `GET /progress-updates` - read all progress updates for all objectives.
