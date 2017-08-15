@@ -1,5 +1,10 @@
 ## Objectives Organiser RESTful API
 
+[![Stories in Backlog](https://badge.waffle.io/yasgreen93/objectives-organiser-api.svg?label=Backlog&title=Backlog)](http://waffle.io/yasgreen93/objectives-organiser-api)
+[![Stories in progress](https://badge.waffle.io/yasgreen93/objectives-organiser-api.svg?label=In%20Progress&title=In%20Progress)](http://waffle.io/yasgreen93/objectives-organiser-api)
+[![Stories in Done](https://badge.waffle.io/yasgreen93/objectives-organiser-api.svg?label=Done&title=Done)](http://waffle.io/yasgreen93/objectives-organiser-api)
+
+
 * `npm i` to install modules
 * `npm start` to start the server - port is 8080.
 * `npm test` to run mocha unit tests.
