@@ -1,6 +1,6 @@
 ## Objectives Organiser RESTful API
 
-[![Stories in Ready](https://badge.waffle.io/yasgreen93/objectives-organiser-api.svg?label=ready&title=Ticket # in PR)](http://waffle.io/yasgreen93/objectives-organiser-api)
+[![Stories in Ready](https://badge.waffle.io/yasgreen93/objectives-organiser-api.svg?label=ready&title=Ticket%20#%20in%20PR)](http://waffle.io/yasgreen93/objectives-organiser-api)
 
 
 * `npm i` to install modules
