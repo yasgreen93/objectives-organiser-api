@@ -1,7 +1,7 @@
 ## Objectives Organiser RESTful API
 
 * `npm i` to install modules
-* `npm start` to start the server - port is 3000.
+* `npm start` to start the server - port is 8080.
 * `npm test` to run mocha unit tests.
 * `npm run test:watch` to run `--watch` on the tests.
 * To run test coverage locally: `npm run test:coverage`.
