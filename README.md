@@ -1,8 +1,5 @@
 ## Objectives Organiser RESTful API
 
-[![Stories in Ready](https://badge.waffle.io/yasgreen93/objectives-organiser-api.svg?label=ready&title=Ticket%20#%20in%20PR)](http://waffle.io/yasgreen93/objectives-organiser-api)
-
-
 * `npm i` to install modules
 * `npm start` to start the server - port is 8080.
 * `npm test` to run mocha unit tests.
