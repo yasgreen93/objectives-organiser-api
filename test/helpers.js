@@ -7,6 +7,7 @@ const exampleObjectiveBook = {
   totalPagesVideos: 123,
   timeAllocated: '1 hour per day',
   completed: false,
+  userId: 1,
 };
 
 const exampleUser = {
@@ -23,6 +24,7 @@ const exampleObjectiveVideo = {
   totalPagesVideos: 20,
   timeAllocated: '1 hour per 2 days',
   completed: false,
+  userId: 1,
 };
 
 const exampleProgressUpdate = {
@@ -30,6 +32,7 @@ const exampleProgressUpdate = {
   objectiveId: 1,
   pageVideoNumReached: 10,
   learningSummary: 'Learned some stuff',
+  userId: 1,
 };
 
 const exampleProgressUpdateTwo = {
@@ -37,6 +40,7 @@ const exampleProgressUpdateTwo = {
   objectiveId: 2,
   pageVideoNumReached: 150,
   learningSummary: 'Learned some more stuff',
+  userId: 1,
 };
 
 const exampleProgressUpdateThree = {
@@ -44,6 +48,7 @@ const exampleProgressUpdateThree = {
   objectiveId: 2,
   pageVideoNumReached: 155,
   learningSummary: 'Learned some more stuff...',
+  userId: 1,
 };
 
 function resetObjectivesTable(done) {
