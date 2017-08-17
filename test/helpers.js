@@ -9,6 +9,13 @@ const exampleObjectiveBook = {
   completed: false,
 };
 
+const exampleUser = {
+  firstName: 'Joe',
+  lastName: 'Bloggs',
+  emailAddress: 'joe@bloggs.com',
+  password: 'joebloggspassword',
+};
+
 const exampleObjectiveVideo = {
   dateCreated: new Date(),
   title: 'test objective video course',
@@ -55,10 +62,24 @@ function resetProgressUpdatesTable(done) {
     });
 }
 
+function resetUsersTable(done) {
+  models.User.sync({ force: true })
+    .then(() => done(null))
+    .catch(() => {
+      console.log('Error'); // eslint-disable-line no-console
+    });
+}
+
 function addObjectiveToDatabase(type) {
   const exampleObjective = type === 'book' ? exampleObjectiveBook : exampleObjectiveVideo;
   return models.Objective.findOrCreate({
     where: exampleObjective,
+  });
+}
+
+function addUserToDatabase() {
+  return models.User.findOrCreate({
+    where: exampleUser,
   });
 }
 
@@ -98,8 +119,10 @@ module.exports = {
   exampleProgressUpdate,
   resetObjectivesTable,
   resetProgressUpdatesTable,
+  resetUsersTable,
   addObjectiveToDatabase,
   addTwoObjectivesToDatabase,
   addProgressUpdateToDatabase,
   addThreeProgressUpdatesToDatabase,
+  addUserToDatabase,
 };
