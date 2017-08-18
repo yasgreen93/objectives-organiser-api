@@ -161,6 +161,36 @@
         </li>
 
       </ul>
+      <hr/>
+    </section>
+
+    <section>
+      <h5>Users endpoints:</h5>
+      <ul>
+        <li class="list-item">
+          <code class="endpoint">POST /users/register</code> -
+          <span>Create a new user:</span>
+          <ul>
+            <li>firstName</li>
+            <li>lastName</li>
+            <li>emailAddress</li>
+            <li>emailAddressConfirmation</li>
+            <li>password</li>
+            <li>passwordConfirmation</li>
+          </ul>
+          <br />
+          <em>If successful it returns JSON of the data added into the DB.</em><br />
+          <em>All fields are required and validated.</em><br>
+          <em>If one or more is missing it will throw a 400 error message, for example: </em>
+          <code class="error-message">"..." is required</code>
+          <em>
+            If the emailAddress and emailAddressConfirmation or password and passwordConfirmation it will throw a 400 error message, for example:
+          </em>
+          <code class="error-message">"..." do not match</code>
+          <em>If the emailAddress is not a valid email it will throw a 400 error message:</em>
+          <code class="error-message">Email is not valid</code>
+        </li>
+      </ul>
     </section>
   </body>
 </html>

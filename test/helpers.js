@@ -7,6 +7,16 @@ const exampleObjectiveBook = {
   totalPagesVideos: 123,
   timeAllocated: '1 hour per day',
   completed: false,
+  userId: 1,
+};
+
+const exampleUser = {
+  firstName: 'Joe',
+  lastName: 'Bloggs',
+  emailAddress: 'joe@bloggs.com',
+  emailAddressConfirmation: 'joe@bloggs.com',
+  password: 'joebloggspassword',
+  passwordConfirmation: 'joebloggspassword',
 };
 
 const exampleObjectiveVideo = {
@@ -16,6 +26,7 @@ const exampleObjectiveVideo = {
   totalPagesVideos: 20,
   timeAllocated: '1 hour per 2 days',
   completed: false,
+  userId: 1,
 };
 
 const exampleProgressUpdate = {
@@ -23,6 +34,7 @@ const exampleProgressUpdate = {
   objectiveId: 1,
   pageVideoNumReached: 10,
   learningSummary: 'Learned some stuff',
+  userId: 1,
 };
 
 const exampleProgressUpdateTwo = {
@@ -30,6 +42,7 @@ const exampleProgressUpdateTwo = {
   objectiveId: 2,
   pageVideoNumReached: 150,
   learningSummary: 'Learned some more stuff',
+  userId: 1,
 };
 
 const exampleProgressUpdateThree = {
@@ -37,6 +50,7 @@ const exampleProgressUpdateThree = {
   objectiveId: 2,
   pageVideoNumReached: 155,
   learningSummary: 'Learned some more stuff...',
+  userId: 1,
 };
 
 function resetObjectivesTable(done) {
@@ -49,6 +63,14 @@ function resetObjectivesTable(done) {
 
 function resetProgressUpdatesTable(done) {
   models.ProgressUpdate.sync({ force: true })
+    .then(() => done(null))
+    .catch(() => {
+      console.log('Error'); // eslint-disable-line no-console
+    });
+}
+
+function resetUsersTable(done) {
+  models.User.sync({ force: true })
     .then(() => done(null))
     .catch(() => {
       console.log('Error'); // eslint-disable-line no-console
@@ -96,8 +118,10 @@ module.exports = {
   exampleObjectiveBook,
   exampleObjectiveVideo,
   exampleProgressUpdate,
+  exampleUser,
   resetObjectivesTable,
   resetProgressUpdatesTable,
+  resetUsersTable,
   addObjectiveToDatabase,
   addTwoObjectivesToDatabase,
   addProgressUpdateToDatabase,

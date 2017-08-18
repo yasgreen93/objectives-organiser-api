@@ -6,13 +6,15 @@ module.exports = function(sequelize, DataTypes) {
     type: DataTypes.STRING,
     totalPagesVideos: DataTypes.INTEGER,
     timeAllocated: DataTypes.STRING,
-    completed: DataTypes.BOOLEAN
+    completed: DataTypes.BOOLEAN,
+    userId: DataTypes.INTEGER,
   }, {
     classMethods: {
       associate: function(models) {
+        Objective.belongsTo(models.User);
         Objective.hasMany(models.ProgressUpdate);
-      }
-    }
+      },
+    },
   });
   return Objective;
 };
