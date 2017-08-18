@@ -3,10 +3,12 @@ const path = require('path');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
+const expressValidator = require('express-validator');
 
 const routes = require('./routes/index');
 const objectives = require('./routes/objectives');
 const progressUpdates = require('./routes/progress-updates');
+const users = require('./routes/users');
 
 const app = express();
 
@@ -21,10 +23,16 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(expressValidator({
+  customValidators: {
+    isString: value => (typeof value === 'string' || value instanceof String),
+  },
+}));
 
 app.use('/', routes);
 app.use('/objectives', objectives);
 app.use('/progress-updates', progressUpdates);
+app.use('/users', users);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

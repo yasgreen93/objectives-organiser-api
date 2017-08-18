@@ -14,7 +14,9 @@ const exampleUser = {
   firstName: 'Joe',
   lastName: 'Bloggs',
   emailAddress: 'joe@bloggs.com',
+  emailAddressConfirmation: 'joe@bloggs.com',
   password: 'joebloggspassword',
+  passwordConfirmation: 'joebloggspassword',
 };
 
 const exampleObjectiveVideo = {
@@ -83,8 +85,14 @@ function addObjectiveToDatabase(type) {
 }
 
 function addUserToDatabase() {
+  const { firstName, lastName, emailAddress, password } = exampleUser;
   return models.User.findOrCreate({
-    where: exampleUser,
+    where: {
+      firstName,
+      lastName,
+      emailAddress,
+      password,
+    },
   });
 }
 
@@ -122,6 +130,7 @@ module.exports = {
   exampleObjectiveBook,
   exampleObjectiveVideo,
   exampleProgressUpdate,
+  exampleUser,
   resetObjectivesTable,
   resetProgressUpdatesTable,
   resetUsersTable,

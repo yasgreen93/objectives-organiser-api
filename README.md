@@ -112,5 +112,21 @@ Tests use `objectives-organiser_test` database and clears and creates a new tabl
 
 ---
 
-### MVP test coverage:
-An image of the all tests passing and test coverage can be found at `./mpv-test-coverage.png`
+#### Users:
+* `POST /users/register` - create a new user:
+  * `firstName`
+  * `lastName`
+  * `emailAddress`
+  * `emailAddressConfirmation`
+  * `password`
+  * `passwordConfirmation`
+
+*If successful it returns JSON of the data added into the DB.*
+
+*All fields are required and validated.*
+
+*If one or more is missing it will throw a 400 error message, for example:* `"..." is required`
+
+*If the emailAddress and emailAddressConfirmation or password and passwordConfirmation it will throw a 400 error message, for example:* `"..." do not match`
+
+*If the emailAddress is not a valid email it will throw a 400 error message:* `Email is not valid`.
