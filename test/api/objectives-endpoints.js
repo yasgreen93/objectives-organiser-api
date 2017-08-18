@@ -1,8 +1,8 @@
 const app = require('../../app');
 const request = require('supertest');
+const { createNewObjective } = require('../../server/models/helpers/objective');
 const {
   resetObjectivesTable,
-  addObjectiveToDatabase,
   addTwoObjectivesToDatabase,
   exampleObjectiveBook,
 } = require('../helpers');
@@ -60,7 +60,7 @@ describe('------ OBJECTIVES ENDPOINTS: ------', () => {
 
   describe('GET /objectives', () => {
     it('can receive a GET to /objectives and find all objectives', (done) => {
-      addObjectiveToDatabase('book')
+      createNewObjective(exampleObjectiveBook)
         .then(() => {
           request(app)
             .get('/objectives')
@@ -141,7 +141,7 @@ describe('------ OBJECTIVES ENDPOINTS: ------', () => {
 
   describe('PATCH /objectives/:id', () => {
     it('can receive a PATCH to /objectives to edit an objective', (done) => {
-      addObjectiveToDatabase('book')
+      createNewObjective(exampleObjectiveBook)
         .then(() => {
           request(app)
             .patch('/objectives/1')
@@ -161,7 +161,7 @@ describe('------ OBJECTIVES ENDPOINTS: ------', () => {
         });
     });
     it('should send 400 error if data sent in request is not valid', (done) => {
-      addObjectiveToDatabase('book')
+      createNewObjective(exampleObjectiveBook)
         .then(() => {
           request(app)
             .patch('/objectives/1')

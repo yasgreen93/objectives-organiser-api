@@ -1,6 +1,13 @@
 const express = require('express');
 const models = require('../server/models/index');
 const {
+  createNewObjective,
+  readAllObjectives,
+  readSingleObjective,
+  updateObjective,
+  deleteObjective,
+} = require('../server/models/helpers/objective');
+const {
   validateData,
   objectiveDataSchema,
   updateDataSchema,
@@ -22,24 +29,16 @@ router.post('/', (req, res) => {
   const validatedRequestData = validateData(req.body, objectiveDataSchema);
   return !validatedRequestData.isValid ?
     res.status(400).send(`ERROR 400: ${ validatedRequestData.errorMessage }`) :
-    models.Objective.findOrCreate({
-      where: {
-        dateCreated: new Date(),
-        title,
-        type,
-        totalPagesVideos,
-        timeAllocated,
-        completed: false,
-      },
-    }).then((response) => {
-      const data = response[0].dataValues;
-      res.status(200).send(data);
-    });
+    createNewObjective({ title, type, totalPagesVideos, timeAllocated })
+      .then((response) => {
+        const data = response[0].dataValues;
+        res.status(200).send(data);
+      });
 });
 
 // READ ALL OBJECTIVES /objectives
 router.get('/', (req, res) => {
-  models.Objective.findAll()
+  readAllObjectives()
     .then(objectives => (res.status(200).send(objectives)))
     .catch(error => error);
 });
@@ -47,7 +46,7 @@ router.get('/', (req, res) => {
 // READ A SINGLE OBJECTIVE /objectives/:id
 router.get('/:id', (req, res) => {
   const { params: { id } } = req;
-  models.Objective.findById(id)
+  readSingleObjective(id)
     .then(objective => (res.status(200).send(objective)))
     .catch(error => error);
 });
@@ -59,14 +58,11 @@ router.patch('/:id', (req, res) => {
   const validatedUpdateData = validateData(body, updateDataSchema);
   return !validatedUpdateData.isValid ?
     res.status(400).send(`ERROR 400: ${ validatedUpdateData.errorMessage }`) :
-    models.Objective.update({
+    updateObjective(params.id, {
       title,
       type,
       totalPagesVideos,
       timeAllocated,
-    }, {
-      where: { id: params.id },
-      returning: true,
     })
       .then(objectives => (objectives[1].length > 0 ?
         res.status(200).send(objectives[1][0]) :
@@ -78,9 +74,7 @@ router.patch('/:id', (req, res) => {
 // DELETE SINGLE OBJECTIVE /objectives/:id
 router.delete('/:id', (req, res) => {
   const { params: { id } } = req;
-  models.Objective.destroy({
-    where: { id },
-  })
+  deleteObjective(id)
     .then(response => (
       response === 1 ?
         res.status(200).send(`Objective ID: ${ id } has been deleted successfully.`) :

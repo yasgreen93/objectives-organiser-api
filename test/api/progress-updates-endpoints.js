@@ -1,8 +1,9 @@
 const app = require('../../app');
 const request = require('supertest');
+const { createNewObjective } = require('../../server/models/helpers/objective');
 const {
   resetObjectivesTable,
-  addObjectiveToDatabase,
+  exampleObjectiveBook,
   exampleProgressUpdate,
   addTwoObjectivesToDatabase,
   addProgressUpdateToDatabase,
@@ -25,7 +26,7 @@ after(() => {
 describe('------ PROGRESS UPDATES ENDPOINTS: ------', () => {
   describe('POST /objectives/:id/progress-updates', () => {
     it('can receive POST /objectives/:id/progress-updates which creates a progress update', (done) => {
-      addObjectiveToDatabase('book')
+      createNewObjective(exampleObjectiveBook)
         .then(() => {
           request(app)
             .post('/objectives/1/progress-updates')
@@ -53,7 +54,7 @@ describe('------ PROGRESS UPDATES ENDPOINTS: ------', () => {
         .catch(error => done(error));
     });
     it('should send 400 error if data is missing from request', (done) => {
-      addObjectiveToDatabase('book')
+      createNewObjective(exampleObjectiveBook)
         .then(() => {
           request(app)
             .post('/objectives/1/progress-updates')
@@ -71,7 +72,7 @@ describe('------ PROGRESS UPDATES ENDPOINTS: ------', () => {
         .catch(error => done(error));
     });
     it('should send 400 error if objectiveId send in request body does not match the id sent as params', (done) => {
-      addObjectiveToDatabase('book')
+      createNewObjective(exampleObjectiveBook)
         .then(() => {
           request(app)
             .post('/objectives/1/progress-updates')

@@ -1,4 +1,5 @@
 const models = require('../server/models/index');
+const { createNewObjective } = require('../server/models/helpers/objective');
 
 const exampleObjectiveBook = {
   dateCreated: new Date(),
@@ -77,16 +78,9 @@ function resetUsersTable(done) {
     });
 }
 
-function addObjectiveToDatabase(type) {
-  const exampleObjective = type === 'book' ? exampleObjectiveBook : exampleObjectiveVideo;
-  return models.Objective.findOrCreate({
-    where: exampleObjective,
-  });
-}
-
 function addTwoObjectivesToDatabase() {
-  return addObjectiveToDatabase('book')
-    .then(() => addObjectiveToDatabase('video'))
+  return createNewObjective(exampleObjectiveBook)
+    .then(() => (createNewObjective(exampleObjectiveVideo)))
     .catch(error => error);
 }
 
@@ -122,7 +116,6 @@ module.exports = {
   resetObjectivesTable,
   resetProgressUpdatesTable,
   resetUsersTable,
-  addObjectiveToDatabase,
   addTwoObjectivesToDatabase,
   addProgressUpdateToDatabase,
   addThreeProgressUpdatesToDatabase,
