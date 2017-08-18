@@ -84,18 +84,6 @@ function addObjectiveToDatabase(type) {
   });
 }
 
-function addUserToDatabase() {
-  const { firstName, lastName, emailAddress, password } = exampleUser;
-  return models.User.findOrCreate({
-    where: {
-      firstName,
-      lastName,
-      emailAddress,
-      password,
-    },
-  });
-}
-
 function addTwoObjectivesToDatabase() {
   return addObjectiveToDatabase('book')
     .then(() => addObjectiveToDatabase('video'))
@@ -138,5 +126,4 @@ module.exports = {
   addTwoObjectivesToDatabase,
   addProgressUpdateToDatabase,
   addThreeProgressUpdatesToDatabase,
-  addUserToDatabase,
 };
