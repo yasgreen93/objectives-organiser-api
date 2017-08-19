@@ -1,5 +1,6 @@
 const express = require('express');
 const { createNewUser } = require('../server/models/helpers');
+const { validateUserRegistrationData } = require('./validation');
 
 const router = express.Router();
 
@@ -14,21 +15,7 @@ router.post('/register', (req, res) => {
     },
   } = req;
 
-  /* eslint-disable newline-per-chained-call */
-  req.checkBody('firstName', 'First name is required').notEmpty();
-  req.checkBody('lastName', 'Last name is required').notEmpty();
-  req.checkBody('emailAddress', 'Invalid email')
-    .notEmpty().withMessage('An email address is required')
-    .isEmail().withMessage('Email is not valid');
-  req.checkBody('emailAddressConfirmation', 'Invalid email confirmation')
-    .notEmpty().withMessage('Email confirmation is required')
-    .equals(emailAddress).withMessage('Emails do not match');
-  req.checkBody('password', 'Password is required').notEmpty();
-  req.checkBody('passwordConfirmation', 'Invalid password confirmation')
-    .notEmpty().withMessage('Password confirmation is required')
-    .equals(password).withMessage('Passwords do not match');
-
-  return req.getValidationResult()
+  return validateUserRegistrationData(req, { emailAddress, password })
     .then((result) => {
       const results = result.array();
       const isValid = results.length === 0;

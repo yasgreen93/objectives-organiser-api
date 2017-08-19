@@ -41,7 +41,6 @@
     "pre-commit": "^1.2.2",
     "requirejs": "^2.3.4",
     "should": "^11.2.1",
-    "supertest": "^3.0.0",
-    "validate": "^3.0.1"
+    "supertest": "^3.0.0"
   }
 }

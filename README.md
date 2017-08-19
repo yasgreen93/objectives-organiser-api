@@ -28,7 +28,7 @@ Tests use `objectives-organiser_test` database and clears and creates a new tabl
 
 *If successful it returns JSON of the data added into the DB.*
 
-*All fields are required and validated. If one or more is missing or of an incorrect format it will throw a 400 error, for example:* `ERROR 400: "..." is missing or needs to be a ...`
+*All fields are required and validated. If one or more is missing or of an incorrect format it will throw a 400 and return an array of errors.*
 
 ---
 
@@ -51,7 +51,7 @@ Tests use `objectives-organiser_test` database and clears and creates a new tabl
 
 *If the objective being updated does not exist it returns a 404 with:* `ERROR 404: An objective with the ID of # does not exist`
 
-*All fields are validated. If one or more of an incorrect format it will throw a 400 error, for example:* `ERROR 400: "..." needs to be in a ... format`
+*All fields are required and validated. If one or more is missing or of an incorrect format it will throw a 400 and return an array of errors.*
 
 ---
 
@@ -72,7 +72,7 @@ Tests use `objectives-organiser_test` database and clears and creates a new tabl
 
 *If successful it returns JSON of the data added into the DB.*
 
-*All fields are required and validated. If one or more is missing or of an incorrect format it will throw a 400 error message, for example:* `ERROR 400: "..." is missing or needs to be a ...`
+*All fields are required and validated. If one or more is missing or of an incorrect format it will throw a 400 and return an array of errors.*
 
 ---
 
@@ -99,7 +99,7 @@ Tests use `objectives-organiser_test` database and clears and creates a new tabl
 
 *If the progress update being updated does not exist it returns a 404 with:* `ERROR 404: A progress update with the ID of # does not exist`
 
-*All fields are validated. If one or more of an incorrect format it will throw a 400 error, for example:* `ERROR 400: "..." needs to be in a ... format`
+*All fields are required and validated. If one or more is missing or of an incorrect format it will throw a 400 and return an array of errors.*
 
 ---
 

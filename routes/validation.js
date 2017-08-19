@@ -1,97 +1,95 @@
-const schema = require('validate');
+/* eslint-disable newline-per-chained-call */
+const objectiveSchemaErrors = {
+  titleRequired: 'title is required',
+  titleFormat: 'title needs to be a string',
+  typeRequired: 'type is required',
+  typeFormat: 'type needs to be a string',
+  totalPagesVideosRequired: 'totalPagesVideos is required',
+  totalPagesVideosFormat: 'totalPagesVideos needs to be a number',
+  timeAllocatedRequired: 'timeAllocated is required',
+  timeAllocatedFormat: 'timeAllocated needs to be a string',
+};
 
-const objectiveDataSchema = schema({
-  title: {
-    type: 'string',
-    required: true,
-    message: '"title" is missing or needs to be a string',
-  },
-  type: {
-    type: 'string',
-    required: true,
-    message: '"type" is missing or needs to be a string',
-  },
-  totalPagesVideos: {
-    type: 'number',
-    required: true,
-    message: '"totalPagesVideos" is missing or needs to be a number',
-  },
-  timeAllocated: {
-    type: 'string',
-    required: true,
-    message: '"timeAllocated" is missing or needs to be a string',
-  },
-});
+const progressUpdateSchemaErrors = {
+  objectiveIdRequired: 'objectiveId is required',
+  objectiveIdFormat: 'objectiveId needs to be a number',
+  pageVideoNumReachedRequired: 'pageVideoNumReached is required',
+  pageVideoNumReachedFormat: 'pageVideoNumReached needs to be a number',
+  learningSummaryRequired: 'learningSummary is required',
+  learningSummaryFormat: 'learningSummary needs to be a string',
+};
 
-const updateDataSchema = schema({
-  title: {
-    type: 'string',
-    required: false,
-    message: '"title" needs to be in a string format',
-  },
-  type: {
-    type: 'string',
-    required: false,
-    message: '"type" needs to be in a string format',
-  },
-  totalPagesVideos: {
-    type: 'number',
-    required: false,
-    message: '"totalPagesVideos" needs to be in a number format',
-  },
-  timeAllocated: {
-    type: 'string',
-    required: false,
-    message: '"timeAllocated" needs to be in a string format',
-  },
-});
+const userSchemaErrors = {
+  firstNameRequired: 'First name is required',
+  lastNameRequired: 'Last name is required',
+  emailDefault: 'Invalid email',
+  emailRequired: 'An email address is required',
+  emailInvalid: 'Email is not valid',
+  emailConfirmationDefault: 'Invalid email confirmation',
+  emailConfirmationRequired: 'Email confirmation is required',
+  emailsMisMatch: 'Emails do not match',
+  passwordRequired: 'Password is required',
+  passwordConfirmationDefault: 'Invalid password confirmation',
+  passwordConfirmationRequired: 'Password confirmation is required',
+  passwordsMisMatch: 'Passwords do not match',
+};
 
-const progressUpdateSchema = schema({
-  objectiveId: {
-    type: 'number',
-    required: true,
-    message: '"objectiveId" is missing or needs to be a number',
-  },
-  pageVideoNumReached: {
-    type: 'number',
-    required: true,
-    message: '"pageVideoNumReached" is missing or needs to be a number',
-  },
-  learningSummary: {
-    type: 'string',
-    required: true,
-    message: '"learningSummary" is missing or needs to be a string',
-  },
-});
+function validateNewObjectiveData(req) {
+  req.checkBody('title', objectiveSchemaErrors.titleRequired).notEmpty();
+  req.checkBody('title', objectiveSchemaErrors.titleFormat).isString();
+  req.checkBody('type', objectiveSchemaErrors.typeRequired).notEmpty();
+  req.checkBody('type', objectiveSchemaErrors.typeFormat).isString();
+  req.checkBody('totalPagesVideos', objectiveSchemaErrors.totalPagesVideosRequired).notEmpty();
+  req.checkBody('totalPagesVideos', objectiveSchemaErrors.totalPagesVideosFormat).isInt();
+  req.checkBody('timeAllocated', objectiveSchemaErrors.timeAllocatedRequired).notEmpty();
+  req.checkBody('timeAllocated', objectiveSchemaErrors.timeAllocatedFormat).isString();
+  return req.getValidationResult();
+}
 
-const updateProgressUpdateSchema = schema({
-  pageVideoNumReached: {
-    type: 'number',
-    required: false,
-    message: '"pageVideoNumReached" needs to be in a number format',
-  },
-  learningSummary: {
-    type: 'string',
-    required: false,
-    message: '"learningSummary" needs to be in a string format',
-  },
-});
+function validateUpdateObjectiveData(req) {
+  req.checkBody('title', objectiveSchemaErrors.titleFormat).optional().isString();
+  req.checkBody('type', objectiveSchemaErrors.typeFormat).optional().isString();
+  req.checkBody('totalPagesVideos', objectiveSchemaErrors.totalPagesVideosFormat).optional().isInt();
+  req.checkBody('timeAllocated', objectiveSchemaErrors.timeAllocatedFormat).optional().isString();
+  return req.getValidationResult();
+}
 
-function validateData(dataValues, schemaType) {
-  let isValid = true;
-  let errorMessage = null;
-  const validatedData = schemaType.validate(dataValues)[0];
-  if (validatedData) {
-    isValid = false;
-    errorMessage = validatedData.message;
-  }
-  return { isValid, errorMessage };
+function validateNewProgressUpdateData(req) {
+  req.checkBody('objectiveId', progressUpdateSchemaErrors.objectiveIdRequired).notEmpty();
+  req.checkBody('objectiveId', progressUpdateSchemaErrors.objectiveIdFormat).isInt();
+  req.checkBody('pageVideoNumReached', progressUpdateSchemaErrors.pageVideoNumReachedRequired).notEmpty();
+  req.checkBody('pageVideoNumReached', progressUpdateSchemaErrors.pageVideoNumReachedFormat).isInt();
+  req.checkBody('learningSummary', progressUpdateSchemaErrors.learningSummaryRequired).notEmpty();
+  req.checkBody('learningSummary', progressUpdateSchemaErrors.learningSummaryFormat).isString();
+  return req.getValidationResult();
+}
+
+function validateUpdateProgressUpdateData(req) {
+  req.checkBody('pageVideoNumReached', progressUpdateSchemaErrors.pageVideoNumReachedFormat).optional().isInt();
+  req.checkBody('learningSummary', progressUpdateSchemaErrors.learningSummaryFormat).optional().isString();
+  return req.getValidationResult();
+}
+
+function validateUserRegistrationData(req, { emailAddress, password }) {
+  req.checkBody('firstName', userSchemaErrors.firstNameRequired).notEmpty();
+  req.checkBody('lastName', userSchemaErrors.lastNameRequired).notEmpty();
+  req.checkBody('emailAddress', userSchemaErrors.emailDefault)
+    .notEmpty().withMessage(userSchemaErrors.emailRequired)
+    .isEmail().withMessage(userSchemaErrors.emailInvalid);
+  req.checkBody('emailAddressConfirmation', userSchemaErrors.emailConfirmationDefault)
+    .notEmpty().withMessage(userSchemaErrors.emailConfirmationRequired)
+    .equals(emailAddress).withMessage(userSchemaErrors.emailsMisMatch);
+  req.checkBody('password', userSchemaErrors.passwordRequired).notEmpty();
+  req.checkBody('passwordConfirmation', userSchemaErrors.passwordConfirmationDefault)
+    .notEmpty().withMessage(userSchemaErrors.passwordConfirmationRequired)
+    .equals(password).withMessage(userSchemaErrors.passwordsMisMatch);
+  return req.getValidationResult();
 }
 
 module.exports = {
-  validateData,
-  updateDataSchema,
-  updateProgressUpdateSchema,
-  objectiveDataSchema,
-  progressUpdateSchema,
+  validateUserRegistrationData,
+  validateNewObjectiveData,
+  validateUpdateObjectiveData,
+  validateNewProgressUpdateData,
+  validateUpdateProgressUpdateData,
 };
