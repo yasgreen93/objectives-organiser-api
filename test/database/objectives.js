@@ -1,8 +1,13 @@
 const should = require('should'); // eslint-disable-line no-unused-vars
-const models = require('../../server/models/index');
+const {
+  createNewObjective,
+  readAllObjectives,
+  readSingleObjective,
+  updateObjective,
+  deleteObjective,
+} = require('../../server/models/helpers');
 const {
   resetObjectivesTable,
-  addObjectiveToDatabase,
   addTwoObjectivesToDatabase,
   exampleObjectiveBook,
   exampleObjectiveVideo,
@@ -13,11 +18,11 @@ beforeEach((done) => {
 });
 
 describe('------ OBJECTIVES DATABASE: ------', () => {
-  describe('Adding an objective', () => {
+  describe('createNewObjective function', () => {
     it('should add a new objective to the database', (done) => {
-      addObjectiveToDatabase('book')
+      createNewObjective(exampleObjectiveBook)
         .then(() => {
-          models.Objective.findAll()
+          readAllObjectives()
             .then((objectives) => {
               objectives.length.should.equal(1);
               return done();
@@ -27,11 +32,11 @@ describe('------ OBJECTIVES DATABASE: ------', () => {
     });
   });
 
-  describe('Reading all objectives', () => {
+  describe('readAllObjectives function', () => {
     it('can retrieve all objectives', (done) => {
       addTwoObjectivesToDatabase()
         .then(() => {
-          models.Objective.findAll()
+          readAllObjectives()
             .then((objectives) => {
               objectives.length.should.equal(2);
               objectives[0].dataValues.should.have.keys(
@@ -56,7 +61,7 @@ describe('------ OBJECTIVES DATABASE: ------', () => {
         .catch(error => done(error));
     });
     it('should return an empty array if none exist', (done) => {
-      models.Objective.findAll()
+      readAllObjectives()
         .then((objectives) => {
           objectives.should.be.empty();
           return done();
@@ -65,11 +70,11 @@ describe('------ OBJECTIVES DATABASE: ------', () => {
     });
   });
 
-  describe('Reading a single objective', () => {
+  describe('readSingleObjective function', () => {
     it('should find the correct objective with an ID', (done) => {
       addTwoObjectivesToDatabase()
         .then(() => {
-          models.Objective.findById(2)
+          readSingleObjective(2)
             .then((objective) => {
               objective.dataValues.id.should.equal(2);
               objective.dataValues.should.have.keys(
@@ -90,9 +95,9 @@ describe('------ OBJECTIVES DATABASE: ------', () => {
         .catch(error => done(error));
     });
     it('should return null if no objective with the ID provided exists', (done) => {
-      addObjectiveToDatabase('book')
+      createNewObjective(exampleObjectiveBook)
         .then(() => {
-          models.Objective.findById(3)
+          readSingleObjective(3)
             .then((objective) => {
               (objective === null).should.equal(true);
               return done();
@@ -103,20 +108,13 @@ describe('------ OBJECTIVES DATABASE: ------', () => {
     });
   });
 
-  describe('Updating an objective', () => {
+  describe('updateObjective function', () => {
     it('should update an objective with a specific ID', (done) => {
-      // Adding objective to DB
-      addObjectiveToDatabase('book')
+      createNewObjective(exampleObjectiveBook)
         .then(() => {
-          // Then updating that objective with the ID of 1
-          models.Objective.update({
-            title: 'editing title',
-          }, {
-            where: { id: 1 },
-          })
+          updateObjective(1, { title: 'editing title' })
             .then(() => {
-              // Then finding the objective and checking it has changed.
-              models.Objective.findAll()
+              readAllObjectives()
                 .then((objectives) => {
                   objectives[0].dataValues.title.should.equal('editing title');
                   return done();
@@ -128,11 +126,7 @@ describe('------ OBJECTIVES DATABASE: ------', () => {
         .catch(error => done(error));
     });
     it('should return [ 0 ] if no objective with the ID provided exists', (done) => {
-      models.Objective.update({
-        title: 'editing title',
-      }, {
-        where: { id: 1 },
-      })
+      updateObjective(1, { title: 'editing title' })
         .then((response) => {
           response[0].should.equal(0);
           return done();
@@ -141,15 +135,13 @@ describe('------ OBJECTIVES DATABASE: ------', () => {
     });
   });
 
-  describe('Deleting an objective', () => {
+  describe('deleteObjective function', () => {
     it('should delete an objective with a specific ID', (done) => {
       addTwoObjectivesToDatabase()
         .then(() => {
-          models.Objective.destroy({
-            where: { id: 1 },
-          })
+          deleteObjective(1)
             .then(() => {
-              models.Objective.findAll()
+              readAllObjectives()
                 .then((objectives) => {
                   objectives.length.should.equal(1);
                   objectives[0].dataValues.id.should.equal(2);
@@ -162,9 +154,7 @@ describe('------ OBJECTIVES DATABASE: ------', () => {
         .catch(error => done(error));
     });
     it('should return 0 if no objective with the ID provided exists', (done) => {
-      models.Objective.destroy({
-        where: { id: 1 },
-      })
+      deleteObjective(1)
         .then((response) => {
           response.should.equal(0);
           return done();

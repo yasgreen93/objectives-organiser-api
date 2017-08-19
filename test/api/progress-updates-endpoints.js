@@ -1,11 +1,14 @@
 const app = require('../../app');
 const request = require('supertest');
 const {
+  createNewObjective,
+  createNewProgressUpdate,
+} = require('../../server/models/helpers');
+const {
   resetObjectivesTable,
-  addObjectiveToDatabase,
+  exampleObjectiveBook,
   exampleProgressUpdate,
   addTwoObjectivesToDatabase,
-  addProgressUpdateToDatabase,
   addThreeProgressUpdatesToDatabase,
 } = require('../helpers');
 const httpServer = require('http').createServer(app);
@@ -25,7 +28,7 @@ after(() => {
 describe('------ PROGRESS UPDATES ENDPOINTS: ------', () => {
   describe('POST /objectives/:id/progress-updates', () => {
     it('can receive POST /objectives/:id/progress-updates which creates a progress update', (done) => {
-      addObjectiveToDatabase('book')
+      createNewObjective(exampleObjectiveBook)
         .then(() => {
           request(app)
             .post('/objectives/1/progress-updates')
@@ -53,7 +56,7 @@ describe('------ PROGRESS UPDATES ENDPOINTS: ------', () => {
         .catch(error => done(error));
     });
     it('should send 400 error if data is missing from request', (done) => {
-      addObjectiveToDatabase('book')
+      createNewObjective(exampleObjectiveBook)
         .then(() => {
           request(app)
             .post('/objectives/1/progress-updates')
@@ -71,7 +74,7 @@ describe('------ PROGRESS UPDATES ENDPOINTS: ------', () => {
         .catch(error => done(error));
     });
     it('should send 400 error if objectiveId send in request body does not match the id sent as params', (done) => {
-      addObjectiveToDatabase('book')
+      createNewObjective(exampleObjectiveBook)
         .then(() => {
           request(app)
             .post('/objectives/1/progress-updates')
@@ -212,26 +215,31 @@ describe('------ PROGRESS UPDATES ENDPOINTS: ------', () => {
 
   describe('PATCH /progress-updates/:id', () => {
     it('can receive a PATCH to /progress-updates/:id to edit an objective', (done) => {
-      addProgressUpdateToDatabase()
+      createNewObjective(exampleObjectiveBook)
         .then(() => {
-          request(app)
-            .patch('/progress-updates/1')
-            .send({ pageVideoNumReached: 222 })
-            .end((err, res) => {
-              if (err) {
-                return done(err);
-              }
-              res.statusCode.should.equal(200);
-              const progressUpdate = res.body;
-              progressUpdate.pageVideoNumReached.should.equal(222);
-              progressUpdate.objectiveId.should.equal(exampleProgressUpdate.objectiveId);
-              progressUpdate.learningSummary.should.equal(exampleProgressUpdate.learningSummary);
-              return done();
-            });
-        });
+          createNewProgressUpdate(exampleProgressUpdate)
+            .then(() => {
+              request(app)
+                .patch('/progress-updates/1')
+                .send({ pageVideoNumReached: 222 })
+                .end((err, res) => {
+                  if (err) {
+                    return done(err);
+                  }
+                  res.statusCode.should.equal(200);
+                  const progressUpdate = res.body;
+                  progressUpdate.pageVideoNumReached.should.equal(222);
+                  progressUpdate.objectiveId.should.equal(exampleProgressUpdate.objectiveId);
+                  progressUpdate.learningSummary.should.equal(exampleProgressUpdate.learningSummary);
+                  return done();
+                });
+            })
+            .catch(error => done(error));
+        })
+        .catch(error => done(error));
     });
     it('should send 400 error if data sent in request is not valid', (done) => {
-      addProgressUpdateToDatabase()
+      createNewProgressUpdate(exampleProgressUpdate)
         .then(() => {
           request(app)
             .patch('/progress-updates/1')
