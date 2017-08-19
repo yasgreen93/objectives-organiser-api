@@ -1,8 +1,14 @@
 const express = require('express');
 const models = require('../server/models/index');
 const {
+  readSingleProgressUpdate,
+  readAllProgressUpdates,
+} = require('../server/models/helpers/progressUpdate');
+const {
   validateData,
   updateProgressUpdateSchema,
+  updateProgressUpdate,
+  deleteProgressUpdate,
 } = require('./validation');
 
 const router = express.Router();
@@ -10,14 +16,14 @@ const router = express.Router();
 // READING AN SINGLE PROGRESS UPDATE /progress-updates/:id
 router.get('/:id', (req, res) => {
   const { params: { id } } = req;
-  models.ProgressUpdate.findById(id)
+  readSingleProgressUpdate(id)
     .then(progressUpdate => (res.status(200).send(progressUpdate)))
     .catch(error => error);
 });
 
 // READ ALL PROGRESS UPDATES /progress-updates
 router.get('/', (req, res) => {
-  models.ProgressUpdate.findAll()
+  readAllProgressUpdates()
     .then(progressUpdates => (res.status(200).send(progressUpdates)))
     .catch(error => error);
 });
@@ -30,12 +36,9 @@ router.patch('/:id', (req, res) => {
   const validatedUpdateData = validateData(body, updateProgressUpdateSchema);
   return !validatedUpdateData.isValid || objectiveId ?
     res.status(400).send(`ERROR 400: ${ validatedUpdateData.errorMessage || objectiveIdError }`) :
-    models.ProgressUpdate.update({
+    updateProgressUpdate(params.id, {
       pageVideoNumReached,
       learningSummary,
-    }, {
-      where: { id: params.id },
-      returning: true,
     })
       .then(objectives => (objectives[1].length > 0 ?
         res.status(200).send(objectives[1][0]) :
@@ -47,9 +50,7 @@ router.patch('/:id', (req, res) => {
 // DELETE SINGLE PROGRESS UPDATE /progress-updates/:id
 router.delete('/:id', (req, res) => {
   const { params: { id } } = req;
-  models.ProgressUpdate.destroy({
-    where: { id },
-  })
+  deleteProgressUpdate(id)
     .then(response => (
       response === 1 ?
         res.status(200).send(`Progress update ID: ${ id } has been deleted successfully.`) :

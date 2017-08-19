@@ -1,5 +1,4 @@
 const express = require('express');
-const models = require('../server/models/index');
 const {
   createNewObjective,
   readAllObjectives,
@@ -8,6 +7,11 @@ const {
   deleteObjective,
 } = require('../server/models/helpers/objective');
 const {
+  createNewProgressUpdate,
+  readAllObjectiveProgressUpdates,
+} = require('../server/models/helpers/progressUpdate');
+
+const {
   validateData,
   objectiveDataSchema,
   updateDataSchema,
@@ -15,6 +19,8 @@ const {
 } = require('./validation');
 
 const router = express.Router();
+
+const userId = 1; // THIS WILL BE REMOVED WHEN SESSIONS ARE IMPLEMENTED.
 
 // CREATE OBJECTIVE /objectives
 router.post('/', (req, res) => {
@@ -29,7 +35,7 @@ router.post('/', (req, res) => {
   const validatedRequestData = validateData(req.body, objectiveDataSchema);
   return !validatedRequestData.isValid ?
     res.status(400).send(`ERROR 400: ${ validatedRequestData.errorMessage }`) :
-    createNewObjective({ title, type, totalPagesVideos, timeAllocated })
+    createNewObjective({ title, type, totalPagesVideos, timeAllocated, userId })
       .then((response) => {
         const data = response[0].dataValues;
         res.status(200).send(data);
@@ -97,35 +103,35 @@ router.post('/:id/progress-updates', (req, res) => {
   const nonMatchingIdsError =
     `The objectiveId (${ objectiveId }) and the id provided in the request (${ params.id }) do not match`;
   const validatedRequestData = validateData(req.body, progressUpdateSchema);
-  return validatedRequestData.isValid && objectiveIdsMatch ?
-    models.Objective.findById(params.id)
-      .then(objective => (objective ?
-        models.ProgressUpdate.findOrCreate({
-          where: {
-            dateCreated: new Date(),
-            objectiveId,
-            pageVideoNumReached,
-            learningSummary,
-          },
-        })
-          .then((response) => {
-            const data = response[0].dataValues;
-            res.status(200).send(data);
-          }) :
-        res.status(404).send(`ERROR 404: The objective with an ID of ${ params.id } does not exist`)
-      ))
-      .catch(error => error) :
+  return validatedRequestData.isValid && objectiveIdsMatch ? (
+    readSingleObjective(params.id).then((objective) => {
+      if (objective) {
+        createNewProgressUpdate({
+          objectiveId,
+          pageVideoNumReached,
+          learningSummary,
+          userId,
+        }).then((response) => {
+          const data = response[0].dataValues;
+          res.status(200).send(data);
+        });
+      } else {
+        res.status(404).send(
+          `ERROR 404: The objective with an ID of ${ params.id } does not exist` // eslint-disable-line comma-dangle
+        );
+      }
+    }).catch(error => error)
+  ) : (
     res.status(400).send(
       `ERROR 400: ${ validatedRequestData.errorMessage || nonMatchingIdsError }` // eslint-disable-line comma-dangle
-    );
+    )
+  );
 });
 
 // READING ALL PROGRESS UPDATES FOR A SINGLE OBJECTIVE /objectives/:id/progress-updates
 router.get('/:id/progress-updates', (req, res) => {
   const { params: { id } } = req;
-  models.ProgressUpdate.findAll({
-    where: { objectiveId: id },
-  })
+  readAllObjectiveProgressUpdates(id)
     .then(progressUpdates => (res.status(200).send(progressUpdates)))
     .catch(error => error);
 });
