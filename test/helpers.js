@@ -84,9 +84,9 @@ function addTwoObjectivesToDatabase() {
     .catch(error => error);
 }
 
-function addProgressUpdateToDatabase() {
+function addProgressUpdateToDatabase(optionalArgument) {
   return models.ProgressUpdate.findOrCreate({
-    where: exampleProgressUpdate,
+    where: optionalArgument || exampleProgressUpdate,
   });
 }
 

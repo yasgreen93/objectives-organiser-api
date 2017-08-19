@@ -38,6 +38,32 @@ describe('------ PROGRESS UPDATES DATABASE: ------', () => {
         })
         .catch(error => done(error));
     });
+    it('should throw an error if an attribute is in the wrong format', (done) => {
+      const wrongFormat = {
+        objectiveId: 1,
+        pageVideoNumReached: '123ABC',
+        learningSummary: 'Learned something',
+        userId: 1,
+      };
+      addProgressUpdateToDatabase(wrongFormat)
+        .catch((error) => {
+          error.original.severity.should.equal('ERROR');
+          return done();
+        });
+    });
+    it('should throw an error if an attribute is not provided', (done) => {
+      const emptyField = {
+        objectiveId: 1,
+        pageVideoNumReached: 10,
+        learningSummary: '',
+        userId: 1,
+      };
+      addProgressUpdateToDatabase(emptyField)
+        .catch((error) => {
+          error.errors[0].message.should.equal('Validation notEmpty on learningSummary failed');
+          return done();
+        });
+    });
   });
 
   describe('readAllObjectiveProgressUpdates function', () => {
