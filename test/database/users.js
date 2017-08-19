@@ -1,5 +1,5 @@
 const should = require('should'); // eslint-disable-line no-unused-vars
-const { createNewUser } = require('../../server/models/helpers/user');
+const { createNewUser } = require('../../server/models/helpers');
 const { resetUsersTable } = require('../helpers');
 
 beforeEach((done) => {

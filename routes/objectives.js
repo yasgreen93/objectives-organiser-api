@@ -5,12 +5,9 @@ const {
   readSingleObjective,
   updateObjective,
   deleteObjective,
-} = require('../server/models/helpers/objective');
-const {
   createNewProgressUpdate,
   readAllObjectiveProgressUpdates,
-} = require('../server/models/helpers/progressUpdate');
-
+} = require('../server/models/helpers');
 const {
   validateData,
   objectiveDataSchema,

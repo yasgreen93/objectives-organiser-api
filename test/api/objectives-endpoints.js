@@ -1,6 +1,6 @@
 const app = require('../../app');
 const request = require('supertest');
-const { createNewObjective } = require('../../server/models/helpers/objective');
+const { createNewObjective } = require('../../server/models/helpers');
 const {
   resetObjectivesTable,
   addTwoObjectivesToDatabase,

@@ -5,7 +5,7 @@ const {
   readSingleObjective,
   updateObjective,
   deleteObjective,
-} = require('../../server/models/helpers/objective');
+} = require('../../server/models/helpers');
 const {
   resetObjectivesTable,
   addTwoObjectivesToDatabase,

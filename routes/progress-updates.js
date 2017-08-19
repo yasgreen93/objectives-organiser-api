@@ -1,14 +1,13 @@
 const express = require('express');
-const models = require('../server/models/index');
 const {
   readSingleProgressUpdate,
   readAllProgressUpdates,
-} = require('../server/models/helpers/progressUpdate');
+  updateProgressUpdate,
+  deleteProgressUpdate,
+} = require('../server/models/helpers');
 const {
   validateData,
   updateProgressUpdateSchema,
-  updateProgressUpdate,
-  deleteProgressUpdate,
 } = require('./validation');
 
 const router = express.Router();
@@ -40,8 +39,8 @@ router.patch('/:id', (req, res) => {
       pageVideoNumReached,
       learningSummary,
     })
-      .then(objectives => (objectives[1].length > 0 ?
-        res.status(200).send(objectives[1][0]) :
+      .then(progressUpdates => (progressUpdates[1].length > 0 ?
+        res.status(200).send(progressUpdates[1][0]) :
         res.status(404).send(`ERROR 404: A progress update with the ID of ${ params.id } does not exist`)
       ))
       .catch(error => error);

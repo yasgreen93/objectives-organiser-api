@@ -4,7 +4,7 @@ const {
   resetUsersTable,
   exampleUser,
 } = require('../helpers');
-const { createNewUser } = require('../../server/models/helpers/user');
+const { createNewUser } = require('../../server/models/helpers');
 const httpServer = require('http').createServer(app);
 
 before(() => {

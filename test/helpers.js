@@ -1,5 +1,5 @@
 const models = require('../server/models/index');
-const { createNewObjective } = require('../server/models/helpers/objective');
+const { createNewObjective } = require('../server/models/helpers');
 
 const exampleObjectiveBook = {
   dateCreated: new Date(),
