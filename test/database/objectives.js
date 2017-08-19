@@ -30,6 +30,34 @@ describe('------ OBJECTIVES DATABASE: ------', () => {
         })
         .catch(error => done(error));
     });
+    it('should throw an error if an attribute is in the wrong format', (done) => {
+      const wrongFormat = {
+        title: 'test objective book',
+        type: 'book',
+        totalPagesVideos: '123ABC',
+        timeAllocated: '1 hour per day',
+        userId: 1,
+      };
+      createNewObjective(wrongFormat)
+        .catch((error) => {
+          error.original.severity.should.equal('ERROR');
+          return done();
+        });
+    });
+    it('should throw an error if an attribute is not provided', (done) => {
+      const emptyField = {
+        title: '',
+        type: 'book',
+        totalPagesVideos: 123,
+        timeAllocated: '1 hour per day',
+        userId: 1,
+      };
+      createNewObjective(emptyField)
+        .catch((error) => {
+          error.errors[0].message.should.equal('Validation notEmpty on title failed');
+          return done();
+        });
+    });
   });
 
   describe('readAllObjectives function', () => {
