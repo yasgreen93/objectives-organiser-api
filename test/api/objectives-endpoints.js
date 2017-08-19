@@ -50,9 +50,12 @@ describe('------ OBJECTIVES ENDPOINTS: ------', () => {
           if (err) {
             return done(err);
           }
-          const { res: response } = res;
-          response.statusCode.should.equal(400);
-          response.text.should.equal('ERROR 400: "type" is missing or needs to be a string');
+          res.statusCode.should.equal(400);
+          const firstError = res.body[0];
+          const secondError = res.body[1];
+          res.body.length.should.equal(2);
+          firstError.msg.should.equal('type is required');
+          secondError.msg.should.equal('type needs to be a string');
           return done();
         });
     });
@@ -170,9 +173,10 @@ describe('------ OBJECTIVES ENDPOINTS: ------', () => {
               if (err) {
                 return done(err);
               }
-              const { res: response } = res;
-              response.statusCode.should.equal(400);
-              response.text.should.equal('ERROR 400: "title" needs to be in a string format');
+              res.statusCode.should.equal(400);
+              const error = res.body[0];
+              res.body.length.should.equal(1);
+              error.msg.should.equal('title needs to be a string');
               return done();
             });
         })

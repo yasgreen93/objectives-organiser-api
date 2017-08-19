@@ -65,9 +65,12 @@ describe('------ PROGRESS UPDATES ENDPOINTS: ------', () => {
               if (err) {
                 return done(err);
               }
-              const { res: response } = res;
-              response.statusCode.should.equal(400);
-              response.text.should.equal('ERROR 400: "objectiveId" is missing or needs to be a number');
+              res.statusCode.should.equal(400);
+              const firstError = res.body[0];
+              const secondError = res.body[1];
+              res.body.length.should.equal(2);
+              firstError.msg.should.equal('objectiveId is required');
+              secondError.msg.should.equal('objectiveId needs to be a number');
               return done();
             });
         })
@@ -85,7 +88,7 @@ describe('------ PROGRESS UPDATES ENDPOINTS: ------', () => {
               }
               const { res: response } = res;
               response.statusCode.should.equal(400);
-              response.text.should.equal('ERROR 400: The objectiveId (2) and the id provided in the request (1) do not match');
+              response.text.should.equal('The objectiveId (2) and the id provided in the request (1) do not match');
               return done();
             });
         })
@@ -239,20 +242,25 @@ describe('------ PROGRESS UPDATES ENDPOINTS: ------', () => {
         .catch(error => done(error));
     });
     it('should send 400 error if data sent in request is not valid', (done) => {
-      createNewProgressUpdate(exampleProgressUpdate)
+      createNewObjective(exampleObjectiveBook)
         .then(() => {
-          request(app)
-            .patch('/progress-updates/1')
-            .send({ pageVideoNumReached: '123' })
-            .end((err, res) => {
-              if (err) {
-                return done(err);
-              }
-              const { res: response } = res;
-              response.statusCode.should.equal(400);
-              response.text.should.equal('ERROR 400: "pageVideoNumReached" needs to be in a number format');
-              return done();
-            });
+          createNewProgressUpdate(exampleProgressUpdate)
+            .then(() => {
+              request(app)
+                .patch('/progress-updates/1')
+                .send({ learningSummary: 123 })
+                .end((err, res) => {
+                  if (err) {
+                    return done(err);
+                  }
+                  res.statusCode.should.equal(400);
+                  const error = res.body[0];
+                  res.body.length.should.equal(1);
+                  error.msg.should.equal('learningSummary needs to be a string');
+                  return done();
+                });
+            })
+            .catch(error => done(error));
         })
         .catch(error => done(error));
     });
@@ -278,7 +286,7 @@ describe('------ PROGRESS UPDATES ENDPOINTS: ------', () => {
             return done(err);
           }
           res.statusCode.should.equal(400);
-          res.text.should.equal('ERROR 400: The objectiveId cannot be updated once added');
+          res.text.should.equal('The objectiveId cannot be updated once added');
           return done();
         });
     });
