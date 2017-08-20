@@ -17,6 +17,23 @@ function createNewUser(newUser) {
   });
 }
 
+function getUserById(id) {
+  return models.User.findById(id);
+}
+
+function getUserByEmail(emailAddress) {
+  return models.User.findOne({
+    where: { emailAddress },
+  });
+}
+
+function comparePasswords(candidatePassword, hash) {
+  return bcrypt.compare(candidatePassword, hash);
+}
+
 module.exports = {
   createNewUser,
+  getUserById,
+  getUserByEmail,
+  comparePasswords,
 };

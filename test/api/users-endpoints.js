@@ -138,4 +138,69 @@ describe('------ USERS ENDPOINTS: ------', () => {
         });
     });
   });
+
+  describe('POST /users/login', () => {
+    it('should send a 200 with the user information if login is successful', (done) => {
+      createNewUser(exampleUser)
+        .then(() => {
+          request(app)
+            .post('/users/login')
+            .send({
+              username: exampleUser.emailAddress,
+              password: exampleUser.password,
+            })
+            .end((err, res) => {
+              if (err) {
+                return done(err);
+              }
+              res.statusCode.should.equal(200);
+              res.body.should.have.keys(
+                'id',
+                'firstName',
+                'lastName',
+                'emailAddress',
+                'password',
+                'createdAt',
+                'updatedAt' // eslint-disable-line comma-dangle
+              );
+              return done();
+            });
+        }).catch(error => done(error));
+    });
+    it('should send a 401 with an error message if user is not found', (done) => {
+      request(app)
+        .post('/users/login')
+        .send({
+          username: exampleUser.emailAddress,
+          password: exampleUser.password,
+        })
+        .end((err, res) => {
+          if (err) {
+            return done(err);
+          }
+          res.statusCode.should.equal(401);
+          res.body.message.should.equal('A user by that email address does not exist.');
+          return done();
+        });
+    });
+    it('should send a 401 with an error message for an incorrectPassword', (done) => {
+      createNewUser(exampleUser)
+        .then(() => {
+          request(app)
+            .post('/users/login')
+            .send({
+              username: exampleUser.emailAddress,
+              password: 'incorrectPassword',
+            })
+            .end((err, res) => {
+              if (err) {
+                return done(err);
+              }
+              res.statusCode.should.equal(401);
+              res.body.message.should.equal('Incorrect password for the email address provided.');
+              return done();
+            });
+        }).catch(error => done(error));
+    });
+  });
 });

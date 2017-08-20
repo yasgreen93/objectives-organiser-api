@@ -186,6 +186,23 @@
           <em>If the emailAddress is not a valid email it will throw a 400 error message:</em>
           <code class="error-message">Email is not valid</code>
         </li>
+
+        <li class="list-item">
+          <code class="endpoint">POST /users/login</code> -
+          <span>User login:</span>
+          <ul>
+            <li>emailAddress</li>
+            <li>password</li>
+          </ul>
+          <br />
+          <em>If successful it returns JSON of the user.</em><br />
+          <em>If the user does not exist it returns a 401 with the error message:</em>
+          <code class="error-message">A user by that email address does not exist.</code><br>
+          <em>
+            If the password is incorrect it returns a 401 with the error message:
+          </em>
+          <code class="error-message">Incorrect password for the email address provided.</code>
+        </li>
       </ul>
     </section>
   </body>
