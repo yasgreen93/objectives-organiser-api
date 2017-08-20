@@ -58,6 +58,7 @@ router.post('/register', (req, res) => {
     .catch(error => error);
 });
 
+// LOGIN /users/login
 router.post('/login', (req, res, next) => {
   passport.authenticate('local', (error, user, info) => {
     if (error) {
@@ -90,6 +91,12 @@ passport.deserializeUser((id, done) => {
       }
       return done(null, user);
     }).catch(error => done(error));
+});
+
+// LOGOUT /users/logout
+router.get('/logout', (req, res) => {
+  req.logout();
+  res.status(200).send('Log out successful');
 });
 
 module.exports = router;
