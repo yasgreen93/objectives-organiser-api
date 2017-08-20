@@ -1,5 +1,7 @@
 ## Objectives Organiser RESTful API
 
+[Waffle Board!](https://waffle.io/yasgreen93/objectives-organiser-api/join)
+
 * `npm i` to install modules
 * `npm start` to start the server - port is 8080.
 * `npm test` to run mocha unit tests.
