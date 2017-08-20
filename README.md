@@ -1,4 +1,4 @@
-## Objectives Organiser RESTful API
+# Objectives Organiser RESTful API
 
 [Waffle Board!](https://waffle.io/yasgreen93/objectives-organiser-api/join)
 
@@ -18,10 +18,10 @@ With the tables:
 
 Tests use `objectives-organiser_test` database and clears and creates a new table each time.
 
-### Endpoints:
+## Endpoints:
 
 
-#### Objectives:
+### Objectives:
 * `POST /objectives` - create objective with the data:
   * `title`
   * `type`
@@ -66,7 +66,7 @@ Tests use `objectives-organiser_test` database and clears and creates a new tabl
 
 ---
 
-#### Progress updates:
+### Progress updates:
 * `POST /objectives/:id/progress-updates` - create progress update for single objective:
   * `objectiveId`
   * `pageVideoNumReached`
@@ -114,7 +114,7 @@ Tests use `objectives-organiser_test` database and clears and creates a new tabl
 
 ---
 
-#### Users:
+### Users:
 * `POST /users/register` - create a new user:
   * `firstName`
   * `lastName`
@@ -132,6 +132,8 @@ Tests use `objectives-organiser_test` database and clears and creates a new tabl
 *If the emailAddress and emailAddressConfirmation or password and passwordConfirmation it will throw a 400 error message, for example:* `"..." do not match`
 
 *If the emailAddress is not a valid email it will throw a 400 error message:* `Email is not valid`.
+
+---
 
 * `POST /users/login` - user login:
   * `emailAddress`
