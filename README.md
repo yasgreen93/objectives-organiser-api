@@ -147,6 +147,6 @@ Tests use `objectives-organiser_test` database and clears and creates a new tabl
 
 ---
 
-* `GET /users/LOGOUT` - user logout:
+* `GET /users/logout` - user logout:
 
 *If successful it returns:* `Log out successful`
