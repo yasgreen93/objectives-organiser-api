@@ -4,6 +4,8 @@ const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const expressValidator = require('express-validator');
+const session = require('express-session');
+const passport = require('passport');
 
 const routes = require('./routes/index');
 const objectives = require('./routes/objectives');
@@ -28,6 +30,20 @@ app.use(expressValidator({
     isString: value => (typeof value === 'string' || value instanceof String),
   },
 }));
+
+app.use(session({
+  secret: 'secret',
+  saveUninitialized: true,
+  resave: true,
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.get('*', (req, res, next) => {
+  res.locals.user = req.user || null;
+  next();
+});
 
 app.use('/', routes);
 app.use('/objectives', objectives);

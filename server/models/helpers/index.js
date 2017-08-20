@@ -15,6 +15,9 @@ const {
 } = require('./objective');
 const {
   createNewUser,
+  getUserById,
+  getUserByEmail,
+  comparePasswords,
 } = require('./user');
 
 module.exports = {
@@ -30,4 +33,7 @@ module.exports = {
   updateProgressUpdate,
   deleteProgressUpdate,
   createNewUser,
+  getUserById,
+  getUserByEmail,
+  comparePasswords,
 };
