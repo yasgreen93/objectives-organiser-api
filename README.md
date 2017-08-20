@@ -144,3 +144,9 @@ Tests use `objectives-organiser_test` database and clears and creates a new tabl
 *If the user does not exist it returns a 401 with the error message:* `A user by that email address does not exist.`
 
 *If the password is incorrect it returns a 401 with the error message:* `Incorrect password for the email address provided.`
+
+---
+
+* `GET /users/LOGOUT` - user logout:
+
+*If successful it returns:* `Log out successful`

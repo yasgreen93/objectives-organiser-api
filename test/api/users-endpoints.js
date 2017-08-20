@@ -203,4 +203,19 @@ describe('------ USERS ENDPOINTS: ------', () => {
         }).catch(error => done(error));
     });
   });
+
+  describe('POST /users/login', () => {
+    it('should log the user out and send a 200 with a message', (done) => {
+      request(app)
+        .get('/users/logout')
+        .end((err, res) => {
+          if (err) {
+            return done(err);
+          }
+          res.statusCode.should.equal(200);
+          res.text.should.equal('Log out successful');
+          return done();
+        });
+    });
+  });
 });
