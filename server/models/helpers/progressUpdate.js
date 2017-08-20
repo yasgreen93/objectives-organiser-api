@@ -1,9 +1,9 @@
 const models = require('../index');
 const { readSingleObjective } = require('./objective');
 
-function createNewProgressUpdate(newProgressUpdate) {
-  const { objectiveId, pageVideoNumReached, learningSummary, userId } = newProgressUpdate;
-  return readSingleObjective(objectiveId)
+function createNewProgressUpdate(userId, newProgressUpdate) {
+  const { objectiveId, pageVideoNumReached, learningSummary } = newProgressUpdate;
+  return readSingleObjective(userId, objectiveId)
     .then(objective => (objective ? (
       models.ProgressUpdate.findOrCreate({
         where: {
@@ -17,34 +17,44 @@ function createNewProgressUpdate(newProgressUpdate) {
     ));
 }
 
-function readAllObjectiveProgressUpdates(objectiveId) {
+function readAllObjectiveProgressUpdates(userId, objectiveId) {
   return models.ProgressUpdate.findAll({
-    where: { objectiveId },
+    where: {
+      userId,
+      objectiveId,
+    },
   });
 }
 
-function readSingleProgressUpdate(id) {
-  return models.ProgressUpdate.findById(id);
+function readSingleProgressUpdate(userId, id) {
+  return models.ProgressUpdate.findOne({
+    where: {
+      userId,
+      id,
+    },
+  });
 }
 
-function readAllProgressUpdates() {
-  return models.ProgressUpdate.findAll();
+function readAllProgressUpdates(userId) {
+  return models.ProgressUpdate.findAll({
+    where: { userId },
+  });
 }
 
-function updateProgressUpdate(id, progressUpdate) {
+function updateProgressUpdate(userId, id, progressUpdate) {
   const { pageVideoNumReached, learningSummary } = progressUpdate;
   return models.ProgressUpdate.update({
     pageVideoNumReached,
     learningSummary,
   }, {
-    where: { id },
+    where: { id, userId },
     returning: true,
   });
 }
 
-function deleteProgressUpdate(id) {
+function deleteProgressUpdate(userId, id) {
   return models.ProgressUpdate.destroy({
-    where: { id },
+    where: { id, userId },
   });
 }
 

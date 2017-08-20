@@ -7,6 +7,7 @@ const {
   deleteObjective,
 } = require('../../server/models/helpers');
 const {
+  testUserId,
   resetObjectivesTable,
   addTwoObjectivesToDatabase,
   exampleObjectiveBook,
@@ -20,15 +21,14 @@ beforeEach((done) => {
 describe('------ OBJECTIVES DATABASE: ------', () => {
   describe('createNewObjective function', () => {
     it('should add a new objective to the database', (done) => {
-      createNewObjective(exampleObjectiveBook)
+      createNewObjective(testUserId, exampleObjectiveBook)
         .then(() => {
-          readAllObjectives()
+          readAllObjectives(testUserId)
             .then((objectives) => {
               objectives.length.should.equal(1);
               return done();
             });
-        })
-        .catch(error => done(error));
+        }).catch(error => done(error));
     });
     it('should throw an error if an attribute is in the wrong format', (done) => {
       const wrongFormat = {
@@ -36,9 +36,8 @@ describe('------ OBJECTIVES DATABASE: ------', () => {
         type: 'book',
         totalPagesVideos: '123ABC',
         timeAllocated: '1 hour per day',
-        userId: 1,
       };
-      createNewObjective(wrongFormat)
+      createNewObjective(testUserId, wrongFormat)
         .catch((error) => {
           error.original.severity.should.equal('ERROR');
           return done();
@@ -50,9 +49,8 @@ describe('------ OBJECTIVES DATABASE: ------', () => {
         type: 'book',
         totalPagesVideos: 123,
         timeAllocated: '1 hour per day',
-        userId: 1,
       };
-      createNewObjective(emptyField)
+      createNewObjective(testUserId, emptyField)
         .catch((error) => {
           error.errors[0].message.should.equal('Validation notEmpty on title failed');
           return done();
@@ -61,10 +59,10 @@ describe('------ OBJECTIVES DATABASE: ------', () => {
   });
 
   describe('readAllObjectives function', () => {
-    it('can retrieve all objectives', (done) => {
-      addTwoObjectivesToDatabase()
+    it('can retrieve all objectives for a user', (done) => {
+      addTwoObjectivesToDatabase(testUserId)
         .then(() => {
-          readAllObjectives()
+          readAllObjectives(testUserId)
             .then((objectives) => {
               objectives.length.should.equal(2);
               objectives[0].dataValues.should.have.keys(
@@ -75,6 +73,7 @@ describe('------ OBJECTIVES DATABASE: ------', () => {
                 'totalPagesVideos',
                 'timeAllocated',
                 'completed',
+                'userId',
                 'createdAt',
                 'updatedAt' // eslint-disable-line comma-dangle
               );
@@ -83,26 +82,23 @@ describe('------ OBJECTIVES DATABASE: ------', () => {
               objectives[1].dataValues.id.should.equal(2);
               objectives[1].dataValues.type.should.equal(exampleObjectiveVideo.type);
               return done();
-            })
-            .catch(error => done(error));
-        })
-        .catch(error => done(error));
+            }).catch(error => done(error));
+        }).catch(error => done(error));
     });
     it('should return an empty array if none exist', (done) => {
-      readAllObjectives()
+      readAllObjectives(testUserId)
         .then((objectives) => {
           objectives.should.be.empty();
           return done();
-        })
-        .catch(error => done(error));
+        }).catch(error => done(error));
     });
   });
 
   describe('readSingleObjective function', () => {
-    it('should find the correct objective with an ID', (done) => {
-      addTwoObjectivesToDatabase()
+    it('should find the correct objective with an ID which belongs to a user', (done) => {
+      addTwoObjectivesToDatabase(testUserId)
         .then(() => {
-          readSingleObjective(2)
+          readSingleObjective(testUserId, 2)
             .then((objective) => {
               objective.dataValues.id.should.equal(2);
               objective.dataValues.should.have.keys(
@@ -113,81 +109,70 @@ describe('------ OBJECTIVES DATABASE: ------', () => {
                 'totalPagesVideos',
                 'timeAllocated',
                 'completed',
+                'userId',
                 'createdAt',
                 'updatedAt' // eslint-disable-line comma-dangle
               );
               return done();
-            })
-            .catch(error => done(error));
-        })
-        .catch(error => done(error));
+            }).catch(error => done(error));
+        }).catch(error => done(error));
     });
     it('should return null if no objective with the ID provided exists', (done) => {
-      createNewObjective(exampleObjectiveBook)
+      createNewObjective(testUserId, exampleObjectiveBook)
         .then(() => {
-          readSingleObjective(3)
+          readSingleObjective(2, 1)
             .then((objective) => {
               (objective === null).should.equal(true);
               return done();
-            })
-            .catch(error => done(error));
-        })
-        .catch(error => done(error));
+            }).catch(error => done(error));
+        }).catch(error => done(error));
     });
   });
 
   describe('updateObjective function', () => {
-    it('should update an objective with a specific ID', (done) => {
-      createNewObjective(exampleObjectiveBook)
+    it('should update an objective with a specific ID which belongs to a user', (done) => {
+      createNewObjective(testUserId, exampleObjectiveBook)
         .then(() => {
-          updateObjective(1, { title: 'editing title' })
+          updateObjective(testUserId, 1, { title: 'editing title' })
             .then(() => {
-              readAllObjectives()
+              readAllObjectives(1)
                 .then((objectives) => {
                   objectives[0].dataValues.title.should.equal('editing title');
                   return done();
-                })
-                .catch(error => done(error));
-            })
-            .catch(error => done(error));
-        })
-        .catch(error => done(error));
+                }).catch(error => done(error));
+            }).catch(error => done(error));
+        }).catch(error => done(error));
     });
     it('should return [ 0 ] if no objective with the ID provided exists', (done) => {
-      updateObjective(1, { title: 'editing title' })
+      updateObjective(2, 1, { title: 'editing title' })
         .then((response) => {
           response[0].should.equal(0);
           return done();
-        })
-        .catch(error => done(error));
+        }).catch(error => done(error));
     });
   });
 
   describe('deleteObjective function', () => {
-    it('should delete an objective with a specific ID', (done) => {
-      addTwoObjectivesToDatabase()
+    it('should delete an objective with a specific ID which belongs to a user', (done) => {
+      addTwoObjectivesToDatabase(testUserId)
         .then(() => {
-          deleteObjective(1)
+          deleteObjective(testUserId, 1)
             .then(() => {
-              readAllObjectives()
+              readAllObjectives(testUserId)
                 .then((objectives) => {
                   objectives.length.should.equal(1);
                   objectives[0].dataValues.id.should.equal(2);
                   return done();
-                })
-                .catch(error => done(error));
-            })
-            .catch(error => done(error));
-        })
-        .catch(error => done(error));
+                }).catch(error => done(error));
+            }).catch(error => done(error));
+        }).catch(error => done(error));
     });
     it('should return 0 if no objective with the ID provided exists', (done) => {
-      deleteObjective(1)
+      deleteObjective(2, 1)
         .then((response) => {
           response.should.equal(0);
           return done();
-        })
-        .catch(error => done(error));
+        }).catch(error => done(error));
     });
   });
 });
