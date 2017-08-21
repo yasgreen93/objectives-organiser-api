@@ -5,6 +5,7 @@ const {
   createNewProgressUpdate,
 } = require('../../server/models/helpers');
 const {
+  testUserId,
   resetObjectivesTable,
   exampleObjectiveBook,
   exampleProgressUpdate,
@@ -28,7 +29,7 @@ after(() => {
 describe('------ PROGRESS UPDATES ENDPOINTS: ------', () => {
   describe('POST /objectives/:id/progress-updates', () => {
     it('can receive POST /objectives/:id/progress-updates which creates a progress update', (done) => {
-      createNewObjective(exampleObjectiveBook)
+      createNewObjective(testUserId, exampleObjectiveBook)
         .then(() => {
           request(app)
             .post('/objectives/1/progress-updates')
@@ -52,11 +53,10 @@ describe('------ PROGRESS UPDATES ENDPOINTS: ------', () => {
               dataAdded.learningSummary.should.equal(exampleProgressUpdate.learningSummary);
               return done();
             });
-        })
-        .catch(error => done(error));
+        }).catch(error => done(error));
     });
     it('should send 400 error if data is missing from request', (done) => {
-      createNewObjective(exampleObjectiveBook)
+      createNewObjective(testUserId, exampleObjectiveBook)
         .then(() => {
           request(app)
             .post('/objectives/1/progress-updates')
@@ -73,11 +73,10 @@ describe('------ PROGRESS UPDATES ENDPOINTS: ------', () => {
               secondError.msg.should.equal('objectiveId needs to be a number');
               return done();
             });
-        })
-        .catch(error => done(error));
+        }).catch(error => done(error));
     });
     it('should send 400 error if objectiveId send in request body does not match the id sent as params', (done) => {
-      createNewObjective(exampleObjectiveBook)
+      createNewObjective(testUserId, exampleObjectiveBook)
         .then(() => {
           request(app)
             .post('/objectives/1/progress-updates')
@@ -91,8 +90,7 @@ describe('------ PROGRESS UPDATES ENDPOINTS: ------', () => {
               response.text.should.equal('The objectiveId (2) and the id provided in the request (1) do not match');
               return done();
             });
-        })
-        .catch(error => done(error));
+        }).catch(error => done(error));
     });
     it('should send a 404 if the objectiveId does not exist in the database', (done) => {
       request(app)
@@ -131,10 +129,8 @@ describe('------ PROGRESS UPDATES ENDPOINTS: ------', () => {
                   progressUpdates[1].objectiveId.should.equal(2);
                   return done();
                 });
-            })
-            .catch(error => done(error));
-        })
-        .catch(error => done(error));
+            }).catch(error => done(error));
+        }).catch(error => done(error));
     });
     it('should should send a 200 with an empty array if no progress udpates for that objective exist', (done) => {
       addTwoObjectivesToDatabase()
@@ -149,8 +145,7 @@ describe('------ PROGRESS UPDATES ENDPOINTS: ------', () => {
               res.body.should.be.empty();
               return done();
             });
-        })
-        .catch(error => done(error));
+        }).catch(error => done(error));
     });
   });
 
@@ -168,8 +163,7 @@ describe('------ PROGRESS UPDATES ENDPOINTS: ------', () => {
               res.body.id.should.equal(2);
               return done();
             });
-        })
-        .catch(error => done(error));
+        }).catch(error => done(error));
     });
     it('should should send a 200 with an empty array if no progress udpate with that ID exists', (done) => {
       request(app)
@@ -199,8 +193,7 @@ describe('------ PROGRESS UPDATES ENDPOINTS: ------', () => {
               res.body.length.should.equal(3);
               return done();
             });
-        })
-        .catch(error => done(error));
+        }).catch(error => done(error));
     });
     it('should return a 200 with an empty array if there are no progress updates', (done) => {
       request(app)
@@ -218,9 +211,9 @@ describe('------ PROGRESS UPDATES ENDPOINTS: ------', () => {
 
   describe('PATCH /progress-updates/:id', () => {
     it('can receive a PATCH to /progress-updates/:id to edit an objective', (done) => {
-      createNewObjective(exampleObjectiveBook)
+      createNewObjective(testUserId, exampleObjectiveBook)
         .then(() => {
-          createNewProgressUpdate(exampleProgressUpdate)
+          createNewProgressUpdate(testUserId, exampleProgressUpdate)
             .then(() => {
               request(app)
                 .patch('/progress-updates/1')
@@ -236,15 +229,13 @@ describe('------ PROGRESS UPDATES ENDPOINTS: ------', () => {
                   progressUpdate.learningSummary.should.equal(exampleProgressUpdate.learningSummary);
                   return done();
                 });
-            })
-            .catch(error => done(error));
-        })
-        .catch(error => done(error));
+            }).catch(error => done(error));
+        }).catch(error => done(error));
     });
     it('should send 400 error if data sent in request is not valid', (done) => {
-      createNewObjective(exampleObjectiveBook)
+      createNewObjective(testUserId, exampleObjectiveBook)
         .then(() => {
-          createNewProgressUpdate(exampleProgressUpdate)
+          createNewProgressUpdate(testUserId, exampleProgressUpdate)
             .then(() => {
               request(app)
                 .patch('/progress-updates/1')
@@ -259,10 +250,8 @@ describe('------ PROGRESS UPDATES ENDPOINTS: ------', () => {
                   error.msg.should.equal('learningSummary needs to be a string');
                   return done();
                 });
-            })
-            .catch(error => done(error));
-        })
-        .catch(error => done(error));
+            }).catch(error => done(error));
+        }).catch(error => done(error));
     });
     it('should send a 404 if the progress update does not exist', (done) => {
       request(app)
@@ -306,8 +295,7 @@ describe('------ PROGRESS UPDATES ENDPOINTS: ------', () => {
               res.text.should.equal('Progress update ID: 1 has been deleted successfully.');
               return done();
             });
-        })
-        .catch(error => done(error));
+        }).catch(error => done(error));
     });
     it('should return a 404 if there is no data by the ID provided', (done) => {
       request(app)

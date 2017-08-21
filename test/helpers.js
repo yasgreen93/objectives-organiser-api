@@ -1,6 +1,8 @@
 const models = require('../server/models/index');
 const { createNewObjective } = require('../server/models/helpers');
 
+const testUserId = 1;
+
 const exampleObjectiveBook = {
   dateCreated: new Date(),
   title: 'test objective book',
@@ -78,9 +80,9 @@ function resetUsersTable(done) {
     });
 }
 
-function addTwoObjectivesToDatabase() {
-  return createNewObjective(exampleObjectiveBook)
-    .then(() => (createNewObjective(exampleObjectiveVideo)))
+function addTwoObjectivesToDatabase(userId) {
+  return createNewObjective(userId, exampleObjectiveBook)
+    .then(() => (createNewObjective(userId, exampleObjectiveVideo)))
     .catch(error => error);
 }
 
@@ -102,13 +104,12 @@ function addThreeProgressUpdatesToDatabase() {
           models.ProgressUpdate.findOrCreate({
             where: exampleProgressUpdateThree,
           })
-        ))
-        .catch(error => error)
-    ))
-    .catch(error => error);
+        )).catch(error => error)
+    )).catch(error => error);
 }
 
 module.exports = {
+  testUserId,
   exampleObjectiveBook,
   exampleObjectiveVideo,
   exampleProgressUpdate,

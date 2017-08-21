@@ -2,6 +2,7 @@ const app = require('../../app');
 const request = require('supertest');
 const { createNewObjective } = require('../../server/models/helpers');
 const {
+  testUserId,
   resetObjectivesTable,
   addTwoObjectivesToDatabase,
   exampleObjectiveBook,
@@ -62,8 +63,8 @@ describe('------ OBJECTIVES ENDPOINTS: ------', () => {
   });
 
   describe('GET /objectives', () => {
-    it('can receive a GET to /objectives and find all objectives', (done) => {
-      createNewObjective(exampleObjectiveBook)
+    it('can receive a GET to /objectives and find all objectives for the logged in user', (done) => {
+      createNewObjective(testUserId, exampleObjectiveBook)
         .then(() => {
           request(app)
             .get('/objectives')
@@ -82,8 +83,7 @@ describe('------ OBJECTIVES ENDPOINTS: ------', () => {
               dataReceived[0].should.have.keys('dateCreated', 'createdAt', 'updatedAt');
               return done();
             });
-        })
-        .catch(error => error);
+        }).catch(error => error);
     });
     it('returns a 200 with an empty array if there are no objectives', (done) => {
       request(app)
@@ -100,8 +100,8 @@ describe('------ OBJECTIVES ENDPOINTS: ------', () => {
   });
 
   describe('GET /objectives/:id', () => {
-    it('should retreive an objective with the ID provided if it exists', (done) => {
-      addTwoObjectivesToDatabase()
+    it('should retreive an objective with the ID provided if it exists for the logged in user', (done) => {
+      addTwoObjectivesToDatabase(testUserId)
         .then(() => {
           request(app)
             .get('/objectives/2')
@@ -120,13 +120,13 @@ describe('------ OBJECTIVES ENDPOINTS: ------', () => {
                 'totalPagesVideos',
                 'timeAllocated',
                 'completed',
+                'userId',
                 'createdAt',
                 'updatedAt' // eslint-disable-line comma-dangle
               );
               return done();
             });
-        })
-        .catch(error => done(error));
+        }).catch(error => done(error));
     });
     it('should return a 200 with an empty array if there is no data by the ID provided', (done) => {
       request(app)
@@ -144,7 +144,7 @@ describe('------ OBJECTIVES ENDPOINTS: ------', () => {
 
   describe('PATCH /objectives/:id', () => {
     it('can receive a PATCH to /objectives to edit an objective', (done) => {
-      createNewObjective(exampleObjectiveBook)
+      createNewObjective(testUserId, exampleObjectiveBook)
         .then(() => {
           request(app)
             .patch('/objectives/1')
@@ -164,7 +164,7 @@ describe('------ OBJECTIVES ENDPOINTS: ------', () => {
         });
     });
     it('should send 400 error if data sent in request is not valid', (done) => {
-      createNewObjective(exampleObjectiveBook)
+      createNewObjective(testUserId, exampleObjectiveBook)
         .then(() => {
           request(app)
             .patch('/objectives/1')
@@ -179,8 +179,7 @@ describe('------ OBJECTIVES ENDPOINTS: ------', () => {
               error.msg.should.equal('title needs to be a string');
               return done();
             });
-        })
-        .catch(error => done(error));
+        }).catch(error => done(error));
     });
     it('should send a 404 if the objective does not exist', (done) => {
       request(app)
@@ -199,7 +198,7 @@ describe('------ OBJECTIVES ENDPOINTS: ------', () => {
 
   describe('DELETE /objectives/:id', () => {
     it('can receive a DELETE request to /objectives/:id to delete an objective', (done) => {
-      addTwoObjectivesToDatabase()
+      addTwoObjectivesToDatabase(testUserId)
         .then(() => {
           request(app)
             .delete('/objectives/1')
@@ -211,8 +210,7 @@ describe('------ OBJECTIVES ENDPOINTS: ------', () => {
               res.text.should.equal('Objective ID: 1 has been deleted successfully.');
               return done();
             });
-        })
-        .catch(error => done(error));
+        }).catch(error => done(error));
     });
     it('should return a 404 if there is no data by the ID provided', (done) => {
       request(app)

@@ -1,7 +1,7 @@
 const models = require('../index');
 
-function createNewObjective(newObjective) {
-  const { title, type, totalPagesVideos, timeAllocated, userId } = newObjective;
+function createNewObjective(userId, newObjective) {
+  const { title, type, totalPagesVideos, timeAllocated } = newObjective;
   return models.Objective.findOrCreate({
     where: {
       dateCreated: new Date(),
@@ -15,15 +15,22 @@ function createNewObjective(newObjective) {
   });
 }
 
-function readAllObjectives() {
-  return models.Objective.findAll();
+function readAllObjectives(userId) {
+  return models.Objective.findAll({
+    where: { userId },
+  });
 }
 
-function readSingleObjective(id) {
-  return models.Objective.findById(id);
+function readSingleObjective(userId, id) {
+  return models.Objective.findOne({
+    where: {
+      userId,
+      id,
+    },
+  });
 }
 
-function updateObjective(id, updateData) {
+function updateObjective(userId, id, updateData) {
   const { title, type, totalPagesVideos, timeAllocated } = updateData;
   return models.Objective.update({
     title,
@@ -31,14 +38,20 @@ function updateObjective(id, updateData) {
     totalPagesVideos,
     timeAllocated,
   }, {
-    where: { id },
+    where: {
+      userId,
+      id,
+    },
     returning: true,
   });
 }
 
-function deleteObjective(id) {
+function deleteObjective(userId, id) {
   return models.Objective.destroy({
-    where: { id },
+    where: {
+      userId,
+      id,
+    },
   });
 }
 

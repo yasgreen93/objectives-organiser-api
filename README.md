@@ -145,6 +145,12 @@ Tests use `objectives-organiser_test` database and clears and creates a new tabl
 
 *If the password is incorrect it returns a 401 with the error message:* `Incorrect password for the email address provided.`
 
+***N.B. If you create a HTML form for a user to log in, use the following name attributes for the input fields:***
+* Email address input field needs a `name` attribute of `username`
+* Password input field needs a `name` attribute of `password`.
+
+Explanation in [Stack overflow comment](https://stackoverflow.com/a/34519308/5929786).
+
 ---
 
 * `GET /users/logout` - user logout:

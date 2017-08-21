@@ -8,6 +8,7 @@ const {
   deleteProgressUpdate,
 } = require('../../server/models/helpers');
 const {
+  testUserId,
   exampleObjectiveBook,
   exampleProgressUpdate,
   resetProgressUpdatesTable,
@@ -23,20 +24,18 @@ beforeEach((done) => {
 describe('------ PROGRESS UPDATES DATABASE: ------', () => {
   describe('createNewProgressUpdate function', () => {
     it('should add a new progress to the database', (done) => {
-      createNewObjective(exampleObjectiveBook)
+      createNewObjective(testUserId, exampleObjectiveBook)
         .then(() => {
-          createNewProgressUpdate(exampleProgressUpdate)
+          createNewProgressUpdate(testUserId, exampleProgressUpdate)
             .then(() => {
-              readAllProgressUpdates()
+              readAllProgressUpdates(testUserId)
                 .then((updates) => {
                   updates.length.should.equal(1);
+
                   return done();
-                })
-                .catch(error => done(error));
-            })
-            .catch(error => done(error));
-        })
-        .catch(error => done(error));
+                }).catch(error => done(error));
+            }).catch(error => done(error));
+        }).catch(error => done(error));
     });
     it('should throw an error if an attribute is in the wrong format', (done) => {
       const wrongFormat = {
@@ -70,7 +69,7 @@ describe('------ PROGRESS UPDATES DATABASE: ------', () => {
     it('should retreive all progress udpdates for the objective with the ID given', (done) => {
       addThreeProgressUpdatesToDatabase()
         .then(() => {
-          readAllObjectiveProgressUpdates(2)
+          readAllObjectiveProgressUpdates(testUserId, 2)
             .then((progressUpdate) => {
               progressUpdate.length.should.equal(2);
               progressUpdate[0].dataValues.objectiveId.should.equal(2);
@@ -78,18 +77,15 @@ describe('------ PROGRESS UPDATES DATABASE: ------', () => {
               progressUpdate[1].dataValues.objectiveId.should.equal(2);
               progressUpdate[1].dataValues.id.should.equal(3);
               return done();
-            })
-            .catch(error => done(error));
-        })
-        .catch(error => done(error));
+            }).catch(error => done(error));
+        }).catch(error => done(error));
     });
     it('should return an empty array if none exist for that objective', (done) => {
-      readAllObjectiveProgressUpdates(1)
+      readAllObjectiveProgressUpdates(testUserId)
         .then((progressUpdates) => {
           progressUpdates.should.be.empty();
           return done();
-        })
-        .catch(error => done(error));
+        }).catch(error => done(error));
     });
   });
 
@@ -97,22 +93,19 @@ describe('------ PROGRESS UPDATES DATABASE: ------', () => {
     it('should fetch a single prgoress update with the ID given', (done) => {
       addThreeProgressUpdatesToDatabase()
         .then(() => {
-          readSingleProgressUpdate(2)
+          readSingleProgressUpdate(testUserId, 2)
             .then((progressUpdate) => {
               progressUpdate.dataValues.id.should.equal(2);
               return done();
-            })
-            .catch(error => done(error));
-        })
-        .catch(error => done(error));
+            }).catch(error => done(error));
+        }).catch(error => done(error));
     });
     it('should return null none exists by the ID given', (done) => {
-      readSingleProgressUpdate(1)
+      readSingleProgressUpdate(testUserId, 1)
         .then((progressUpdate) => {
           (progressUpdate === null).should.equal(true);
           return done();
-        })
-        .catch(error => done(error));
+        }).catch(error => done(error));
     });
   });
 
@@ -120,12 +113,11 @@ describe('------ PROGRESS UPDATES DATABASE: ------', () => {
     it('should retreive all progress updates', (done) => {
       addThreeProgressUpdatesToDatabase()
         .then(() => {
-          readAllProgressUpdates()
+          readAllProgressUpdates(testUserId)
             .then((progressUpdates) => {
               progressUpdates.length.should.equal(3);
               return done();
-            })
-            .catch(error => done(error));
+            }).catch(error => done(error));
         });
     });
   });
@@ -134,30 +126,26 @@ describe('------ PROGRESS UPDATES DATABASE: ------', () => {
     it('should update a progress update with a specific ID', (done) => {
       addProgressUpdateToDatabase()
         .then(() => {
-          updateProgressUpdate(1, {
+          updateProgressUpdate(testUserId, 1, {
             pageVideoNumReached: 1234,
           })
             .then(() => {
-              readAllProgressUpdates()
+              readAllProgressUpdates(testUserId)
                 .then((progressUpdates) => {
                   progressUpdates[0].dataValues.pageVideoNumReached.should.equal(1234);
                   return done();
-                })
-                .catch(error => done(error));
-            })
-            .catch(error => done(error));
-        })
-        .catch(error => done(error));
+                }).catch(error => done(error));
+            }).catch(error => done(error));
+        }).catch(error => done(error));
     });
     it('should return [ 0 ] if no progress update with the ID provided exists', (done) => {
-      updateProgressUpdate(1, {
+      updateProgressUpdate(testUserId, 1, {
         pageVideoNumReached: 1234,
       })
         .then((response) => {
           response[0].should.equal(0);
           return done();
-        })
-        .catch(error => done(error));
+        }).catch(error => done(error));
     });
   });
 
@@ -165,27 +153,23 @@ describe('------ PROGRESS UPDATES DATABASE: ------', () => {
     it('should delete a progress update with a specific ID', (done) => {
       addThreeProgressUpdatesToDatabase()
         .then(() => {
-          deleteProgressUpdate(1)
+          deleteProgressUpdate(testUserId, 1)
             .then(() => {
-              readAllProgressUpdates()
+              readAllProgressUpdates(testUserId)
                 .then((progressUpdates) => {
                   progressUpdates.length.should.equal(2);
                   progressUpdates[0].dataValues.id.should.equal(2);
                   return done();
-                })
-                .catch(error => done(error));
-            })
-            .catch(error => done(error));
-        })
-        .catch(error => done(error));
+                }).catch(error => done(error));
+            }).catch(error => done(error));
+        }).catch(error => done(error));
     });
     it('should return 0 if no progress update with the ID provided exists', (done) => {
-      deleteProgressUpdate(1)
+      deleteProgressUpdate(testUserId, 1)
         .then((response) => {
           response.should.equal(0);
           return done();
-        })
-        .catch(error => done(error));
+        }).catch(error => done(error));
     });
   });
 });
