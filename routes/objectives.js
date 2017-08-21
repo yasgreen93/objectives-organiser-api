@@ -13,11 +13,11 @@ const {
   validateUpdateObjectiveData,
   validateNewProgressUpdateData,
 } = require('./validation');
-const { ensureAuthenticated } = require('./index');
-const { getSessionUserId } = require('./index');
+const { ensureAuthenticated, getSessionUserId } = require('./index');
 
 const router = express.Router();
 
+// For testing only...
 router.get('/create', ensureAuthenticated, (req, res) => {
   res.render('create-objective');
 });
