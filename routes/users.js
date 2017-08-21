@@ -23,11 +23,6 @@ passport.use(new LocalStrategy((username, password, done) => {
     }).catch(error => done(error));
 }));
 
-// For testing only...
-router.get('/login', (req, res) => {
-  res.render('login');
-});
-
 // CREATE USER /users/register
 router.post('/register', (req, res) => {
   const {

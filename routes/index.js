@@ -22,10 +22,6 @@ router.get('/', (req, res) => {
   res.render('index');
 });
 
-router.get('/test-home', (req, res) => {
-  res.render('test-home');
-});
-
 module.exports = router;
 module.exports.ensureAuthenticated = ensureAuthenticated;
 module.exports.getSessionUserId = getSessionUserId;
