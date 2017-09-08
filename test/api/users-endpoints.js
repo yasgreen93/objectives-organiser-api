@@ -220,7 +220,7 @@ describe('------ USERS ENDPOINTS: ------', () => {
   });
 
   describe('PATCH /users/:id', () => {
-    it('can receive a PATCH to /users/:id to edit an objective', (done) => {
+    it('can receive a PATCH to /users/:id to edit a users information', (done) => {
       createNewUser(exampleUser)
         .then(() => {
           request(app)
