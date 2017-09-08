@@ -6,9 +6,11 @@ const {
   getUserById,
   getUserByEmail,
   comparePasswords,
+  updateUser,
   deleteUser,
 } = require('../server/models/helpers');
-const { validateUserRegistrationData } = require('./validation');
+const { validateUserRegistrationData, validateUpdateUserData } = require('./validation');
+const { getSessionUserId } = require('./index');
 
 const router = express.Router();
 
@@ -103,6 +105,31 @@ passport.deserializeUser((id, done) => {
 router.get('/logout', (req, res) => {
   req.logout();
   res.status(200).send('Log out successful');
+});
+
+// EDIT USER INFORMATION /users/:id
+router.patch('/:id', (req, res) => {
+  const userId = getSessionUserId(req);
+  const { body, params } = req;
+  const { firstName, lastName, emailAddress, password } = body || null;
+  return validateUpdateUserData(req)
+    .then((result) => {
+      const results = result.array();
+      const isValid = results.length === 0;
+      return isValid ? (updateUser(userId, {
+        firstName,
+        lastName,
+        emailAddress,
+        password,
+      })
+        .then(users => (users[1].length > 0 ?
+          res.status(200).send(users[1][0]) :
+          res.status(404).send(
+            `ERROR 404: An user with the ID of ${ params.id } does not exist` // eslint-disable-line comma-dangle
+          )
+        )).catch(error => error)
+      ) : (res.status(400).send(results));
+    }).catch(error => error);
 });
 
 // DELETE USER /users/:id

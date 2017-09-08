@@ -213,6 +213,23 @@
         </li>
 
         <li class="list-item">
+          <code class="endpoint">PATCH /users/:id</code> -
+          <span>Edit user information with any of:</span>
+          <ul>
+            <li>firstName</li>
+            <li>lastName</li>
+            <li>emailAddress</li>
+            <li>password</li>
+          </ul>
+          <br />
+          <em>N.B. the userId of a user can not be edited once created.</em><br />
+          <em>If successful it returns JSON of the updated data.</em><br />
+          <em>If the user being updated does not exist it returns a 404 with:</em>
+          <code class="error-message">ERROR 404: A user with the ID of # does not exist</code>
+          <em>All fields are required and validated. If one or more is missing or of an incorrect format it will throw a 400 and return an array of errors.</em>
+        </li>
+
+        <li class="list-item">
           <code class="endpoint">DELETE /users/:id</code> -
           <span>Delete a user with a specific ID</span>
           <br /><br />

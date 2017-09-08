@@ -31,6 +31,22 @@ function comparePasswords(candidatePassword, hash) {
   return bcrypt.compare(candidatePassword, hash);
 }
 
+function updateUser(userId, userInformation) {
+  const { firstName, lastName, emailAddress, password } = userInformation;
+  const hashedPassword = password ? bcrypt.hashSync(password, salt) : password;
+  return models.User.update({
+    firstName,
+    lastName,
+    emailAddress,
+    password: hashedPassword,
+  }, {
+    where: {
+      id: userId,
+    },
+    returning: true,
+  });
+}
+
 function deleteUser(userId) {
   return models.User.destroy({
     where: {
@@ -44,5 +60,6 @@ module.exports = {
   getUserById,
   getUserByEmail,
   comparePasswords,
+  updateUser,
   deleteUser,
 };
