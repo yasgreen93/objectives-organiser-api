@@ -156,3 +156,14 @@ Explanation in [Stack overflow comment](https://stackoverflow.com/a/34519308/592
 * `GET /users/logout` - user logout:
 
 *If successful it returns:* `Log out successful`
+
+---
+
+* `DELETE /users/:id` - delete user with:
+  * `id`
+
+*If successful it returns a confirmation message.*
+
+*If unsuccessful it returns a 404 error, for example:* `ERROR 404: A user with the ID: # has not been found`
+
+---

@@ -1,7 +1,13 @@
 const express = require('express');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-const { createNewUser, getUserById, getUserByEmail, comparePasswords } = require('../server/models/helpers');
+const {
+  createNewUser,
+  getUserById,
+  getUserByEmail,
+  comparePasswords,
+  deleteUser,
+} = require('../server/models/helpers');
 const { validateUserRegistrationData } = require('./validation');
 
 const router = express.Router();
@@ -97,6 +103,17 @@ passport.deserializeUser((id, done) => {
 router.get('/logout', (req, res) => {
   req.logout();
   res.status(200).send('Log out successful');
+});
+
+// DELETE USER /users/:id
+router.delete('/:id', (req, res) => {
+  const { params: { id } } = req;
+  deleteUser(id)
+    .then(response => (
+      response === 1 ?
+        res.status(200).send(`User ID: ${ id } has been deleted successfully.`) :
+        res.status(404).send(`ERROR 404: A user with the ID: ${ id } has not been found`)
+    )).catch(error => error);
 });
 
 module.exports = router;

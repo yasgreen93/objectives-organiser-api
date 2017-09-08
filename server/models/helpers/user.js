@@ -31,9 +31,18 @@ function comparePasswords(candidatePassword, hash) {
   return bcrypt.compare(candidatePassword, hash);
 }
 
+function deleteUser(userId) {
+  return models.User.destroy({
+    where: {
+      id: userId,
+    },
+  });
+}
+
 module.exports = {
   createNewUser,
   getUserById,
   getUserByEmail,
   comparePasswords,
+  deleteUser,
 };
