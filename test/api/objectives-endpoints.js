@@ -143,7 +143,7 @@ describe('------ OBJECTIVES ENDPOINTS: ------', () => {
   });
 
   describe('PATCH /objectives/:id', () => {
-    it('can receive a PATCH to /objectives to edit an objective', (done) => {
+    it('can receive a PATCH to /objectives/:id to edit an objective', (done) => {
       createNewObjective(testUserId, exampleObjectiveBook)
         .then(() => {
           request(app)

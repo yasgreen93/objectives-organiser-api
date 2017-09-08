@@ -4,8 +4,9 @@ const {
   getUserById,
   getUserByEmail,
   comparePasswords,
+  updateUser,
 } = require('../../server/models/helpers');
-const { resetUsersTable } = require('../helpers');
+const { resetUsersTable, testUserId } = require('../helpers');
 
 beforeEach((done) => {
   resetUsersTable(done);
@@ -153,6 +154,43 @@ describe('------ USERS DATABASE: ------', () => {
                   return done();
                 }).catch(error => done(error));
             }).catch(error => done(error));
+        }).catch(error => done(error));
+    });
+  });
+
+  describe('updateUser function', () => {
+    it('should edit a users information with the information provided', (done) => {
+      const newEmail = 'editedEmail@email.com';
+      createNewUser(user)
+        .then(() => {
+          updateUser(testUserId, { emailAddress: newEmail })
+            .then((response) => {
+              const updatedUser = response[1][0].dataValues;
+              updatedUser.firstName.should.equal(user.firstName);
+              updatedUser.lastName.should.equal(user.lastName);
+              updatedUser.emailAddress.should.equal(newEmail);
+              return done();
+            }).catch(error => done(error));
+        }).catch(error => done(error));
+    });
+    it('should throw an error if information is not validated', (done) => {
+      createNewUser(user)
+        .then(() => {
+          updateUser(testUserId, { emailAddress: 'invalidEmail' })
+            .catch((error) => {
+              error.errors[0].message.should.equal('Validation isEmail on emailAddress failed');
+              return done();
+            });
+        }).catch(error => done(error));
+    });
+    it('should return an empty array if user the user does not exist', (done) => {
+      updateUser(testUserId, { emailAddress: 'email@email.com' })
+        .then((response) => {
+          Array.isArray(response).should.equal(true);
+          response[0].should.equal(0);
+          Array.isArray(response[1]).should.equal(true);
+          response[1].length.should.equal(0);
+          return done();
         }).catch(error => done(error));
     });
   });

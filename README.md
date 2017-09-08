@@ -156,3 +156,21 @@ Explanation in [Stack overflow comment](https://stackoverflow.com/a/34519308/592
 * `GET /users/logout` - user logout:
 
 *If successful it returns:* `Log out successful`
+
+---
+
+* `PATCH /users/:id` - edit user information with any of:
+  * `firstName`
+  * `lastName`
+  * `emailAddress`
+  * `password`
+
+*N.B. the userID of a user can not be edited once created.*
+
+*If successful it returns JSON of the updated data.*
+
+*If the user being updated does not exist it returns a 404 with:* `ERROR 404: A user with the ID of # does not exist`
+
+*All fields are required and validated. If one or more is missing or of an incorrect format it will throw a 400 and return an array of errors.*
+
+---
