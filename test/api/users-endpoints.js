@@ -218,4 +218,57 @@ describe('------ USERS ENDPOINTS: ------', () => {
         });
     });
   });
+
+  describe('PATCH /users/:id', () => {
+    it('can receive a PATCH to /users/:id to edit an objective', (done) => {
+      createNewUser(exampleUser)
+        .then(() => {
+          request(app)
+            .patch('/users/1')
+            .send({ firstName: 'boo' })
+            .end((err, res) => {
+              if (err) {
+                return done(err);
+              }
+              res.statusCode.should.equal(200);
+              const updatedUser = res.body;
+              updatedUser.firstName.should.equal('boo');
+              updatedUser.lastName.should.equal(exampleUser.lastName);
+              updatedUser.emailAddress.should.equal(exampleUser.emailAddress);
+              return done();
+            });
+        });
+    });
+    it('should send 400 error if data sent in request is not valid', (done) => {
+      createNewUser(exampleUser)
+        .then(() => {
+          request(app)
+            .patch('/users/1')
+            .send({ emailAddress: 'invalidEmail' })
+            .end((err, res) => {
+              if (err) {
+                return done(err);
+              }
+              res.statusCode.should.equal(400);
+              const error = res.body[0];
+              res.body.length.should.equal(1);
+              error.msg.should.equal('Email is not valid');
+              return done();
+            });
+        }).catch(error => done(error));
+    });
+    it('should send a 404 if the user does not exist', (done) => {
+      request(app)
+        .patch('/users/1')
+        .send({ emailAddress: 'emailAddress@email.com' })
+        .end((err, res) => {
+          if (err) {
+            return done(err);
+          }
+          res.statusCode.should.equal(404);
+          res.text.should.equal('ERROR 404: An user with the ID of 1 does not exist');
+          return done();
+        });
+    });
+  });
 });

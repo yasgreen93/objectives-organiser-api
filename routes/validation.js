@@ -86,10 +86,16 @@ function validateUserRegistrationData(req, { emailAddress, password }) {
   return req.getValidationResult();
 }
 
+function validateUpdateUserData(req) {
+  req.checkBody('emailAddress', userSchemaErrors.emailInvalid).optional().isEmail();
+  return req.getValidationResult();
+}
+
 module.exports = {
   validateUserRegistrationData,
   validateNewObjectiveData,
   validateUpdateObjectiveData,
   validateNewProgressUpdateData,
   validateUpdateProgressUpdateData,
+  validateUpdateUserData,
 };
