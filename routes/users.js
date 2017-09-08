@@ -1,9 +1,16 @@
 const express = require('express');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-const { createNewUser, getUserById, getUserByEmail, comparePasswords, updateUser } = require('../server/models/helpers');
-const { getSessionUserId } = require('./index');
+const {
+  createNewUser,
+  getUserById,
+  getUserByEmail,
+  comparePasswords,
+  updateUser,
+  deleteUser,
+} = require('../server/models/helpers');
 const { validateUserRegistrationData, validateUpdateUserData } = require('./validation');
+const { getSessionUserId } = require('./index');
 
 const router = express.Router();
 
@@ -124,4 +131,16 @@ router.patch('/:id', (req, res) => {
       ) : (res.status(400).send(results));
     }).catch(error => error);
 });
+
+// DELETE USER /users/:id
+router.delete('/:id', (req, res) => {
+  const { params: { id } } = req;
+  deleteUser(id)
+    .then(response => (
+      response === 1 ?
+        res.status(200).send(`User ID: ${ id } has been deleted successfully.`) :
+        res.status(404).send(`ERROR 404: A user with the ID: ${ id } has not been found`)
+    )).catch(error => error);
+});
+
 module.exports = router;

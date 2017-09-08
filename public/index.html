@@ -228,6 +228,15 @@
           <code class="error-message">ERROR 404: A user with the ID of # does not exist</code>
           <em>All fields are required and validated. If one or more is missing or of an incorrect format it will throw a 400 and return an array of errors.</em>
         </li>
+
+        <li class="list-item">
+          <code class="endpoint">DELETE /users/:id</code> -
+          <span>Delete a user with a specific ID</span>
+          <br /><br />
+          <em>If successful it returns a confirmation message.</em><br />
+          <em>If unsuccessful it returns a 404 error, for example:</em>
+          <code class="error-message">ERROR 404: A user with the ID: # has not been found</code>
+        </li>
       </ul>
     </section>
   </body>

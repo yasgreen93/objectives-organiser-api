@@ -271,4 +271,34 @@ describe('------ USERS ENDPOINTS: ------', () => {
         });
     });
   });
+
+  describe('DELETE /users/:id', () => {
+    it('can receive a DELETE request to /users/:id to delete a user', (done) => {
+      createNewUser(exampleUser)
+        .then(() => {
+          request(app)
+            .delete('/users/1')
+            .end((err, res) => {
+              if (err) {
+                return done(err);
+              }
+              res.statusCode.should.equal(200);
+              res.text.should.equal('User ID: 1 has been deleted successfully.');
+              return done();
+            });
+        }).catch(error => done(error));
+    });
+    it('should return a 404 if there is no data by the ID provided', (done) => {
+      request(app)
+        .delete('/users/3')
+        .end((err, res) => {
+          if (err) {
+            return done(err);
+          }
+          res.error.status.should.equal(404);
+          res.error.text.should.equal('ERROR 404: A user with the ID: 3 has not been found');
+          return done();
+        });
+    });
+  });
 });

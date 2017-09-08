@@ -174,3 +174,10 @@ Explanation in [Stack overflow comment](https://stackoverflow.com/a/34519308/592
 *All fields are required and validated. If one or more is missing or of an incorrect format it will throw a 400 and return an array of errors.*
 
 ---
+
+* `DELETE /users/:id` - delete user with:
+* `id`
+
+*If successful it returns a confirmation message.*
+
+*If unsuccessful it returns a 404 error, for example:* `ERROR 404: A user with the ID: # has not been found`

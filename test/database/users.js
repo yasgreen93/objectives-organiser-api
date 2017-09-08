@@ -5,6 +5,7 @@ const {
   getUserByEmail,
   comparePasswords,
   updateUser,
+  deleteUser,
 } = require('../../server/models/helpers');
 const { resetUsersTable, testUserId } = require('../helpers');
 
@@ -190,6 +191,29 @@ describe('------ USERS DATABASE: ------', () => {
           response[0].should.equal(0);
           Array.isArray(response[1]).should.equal(true);
           response[1].length.should.equal(0);
+          return done();
+        }).catch(error => done(error));
+    });
+  });
+
+  describe('deleteUser function', () => {
+    it('should delete an user with a specific ID', (done) => {
+      createNewUser(user)
+        .then(() => {
+          deleteUser(testUserId)
+            .then(() => {
+              getUserById(testUserId)
+                .then((users) => {
+                  (users === null).should.equal(true);
+                  return done();
+                }).catch(error => done(error));
+            }).catch(error => done(error));
+        }).catch(error => done(error));
+    });
+    it('should return 0 if no user with the ID provided exists', (done) => {
+      deleteUser(2, 1)
+        .then((response) => {
+          response.should.equal(0);
           return done();
         }).catch(error => done(error));
     });

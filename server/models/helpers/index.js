@@ -19,6 +19,7 @@ const {
   getUserByEmail,
   comparePasswords,
   updateUser,
+  deleteUser,
 } = require('./user');
 
 module.exports = {
@@ -38,4 +39,5 @@ module.exports = {
   getUserByEmail,
   comparePasswords,
   updateUser,
+  deleteUser,
 };

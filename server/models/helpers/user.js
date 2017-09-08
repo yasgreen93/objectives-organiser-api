@@ -47,10 +47,19 @@ function updateUser(userId, userInformation) {
   });
 }
 
+function deleteUser(userId) {
+  return models.User.destroy({
+    where: {
+      id: userId,
+    },
+  });
+}
+
 module.exports = {
   createNewUser,
   getUserById,
   getUserByEmail,
   comparePasswords,
   updateUser,
+  deleteUser,
 };
