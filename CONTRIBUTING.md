@@ -1,6 +1,6 @@
 # Want to contribute? Here are the steps!
 
-1. Create an issue in Github with all the necessay information and add a relevant label:
+1. Create an issue in Github with all the necessary information and add a relevant label:
     - `feature addition` for a new feature,
     - `bug` for a bug,
     - `enhancement` for enhancement e.g. refactoring etc.
