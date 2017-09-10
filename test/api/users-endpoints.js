@@ -250,9 +250,13 @@ describe('------ USERS ENDPOINTS: ------', () => {
                 return done(err);
               }
               res.statusCode.should.equal(400);
-              const error = res.body[0];
-              res.body.length.should.equal(1);
-              error.msg.should.equal('Email is not valid');
+              res.body.length.should.equal(3);
+              const firstError = res.body[0];
+              const secondError = res.body[1];
+              const thirdError = res.body[2];
+              firstError.msg.should.equal('Email is not valid');
+              secondError.msg.should.equal('Email confirmation is required');
+              thirdError.msg.should.equal('Emails do not match');
               return done();
             });
         }).catch(error => done(error));
@@ -260,7 +264,7 @@ describe('------ USERS ENDPOINTS: ------', () => {
     it('should send a 404 if the user does not exist', (done) => {
       request(app)
         .patch('/users/1')
-        .send({ emailAddress: 'emailAddress@email.com' })
+        .send({ emailAddress: 'emailAddress@email.com', emailAddressConfirmation: 'emailAddress@email.com' })
         .end((err, res) => {
           if (err) {
             return done(err);

@@ -87,7 +87,20 @@ function validateUserRegistrationData(req, { emailAddress, password }) {
 }
 
 function validateUpdateUserData(req) {
+  const { emailAddress, password } = req.body;
   req.checkBody('emailAddress', userSchemaErrors.emailInvalid).optional().isEmail();
+  /* eslint-disable indent, no-unused-expressions */
+  emailAddress ? (
+    req.checkBody('emailAddressConfirmation', userSchemaErrors.emailConfirmationDefault)
+      .notEmpty().withMessage(userSchemaErrors.emailConfirmationRequired)
+      .equals(emailAddress).withMessage(userSchemaErrors.emailsMisMatch)
+  ) : null;
+  password ? (
+    req.checkBody('passwordConfirmation', userSchemaErrors.passwordConfirmationDefault)
+      .notEmpty().withMessage(userSchemaErrors.passwordConfirmationRequired)
+      .equals(password).withMessage(userSchemaErrors.passwordsMisMatch)
+  ) : null;
+  /* eslint-enable indent, no-unused-expressions */
   return req.getValidationResult();
 }
 
